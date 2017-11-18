@@ -5,14 +5,20 @@
           <div class="form-group">
               <label class="col-sm-2 control-label"><strong>From </strong></label>
               <div class="col-sm-10">
-                <select class="form-control" ng-options="currency.code as (currency.description + ' ('+currency.symbol + ')') for currency in currencies" ng-model="from_currency"></select>
+                <!-- <select class="form-control" ng-options="currency.code as (currency.description + ' ('+currency.symbol + ')') for currency in currencies" ng-model="from_currency"></select> -->
+                <select class="form-control" ng-model="from_currency">
+                  <option label="Nigerian Naira (₦)" value="NGN">Nigerian Naira (₦)</option>
+                </select> 
               </div>
           </div>
           <div class="form-group">
               <label class="col-sm-2 control-label"><strong>To </strong></label>
               <div class="col-sm-10">
                 <div class="alert alert-danger" ng-show="from_currency == to_currency">From and To currencies cannot be same</div>
-                <select class="form-control" ng-options="currency.code as (currency.description + ' ('+currency.symbol + ')') for currency in currencies" ng-model="to_currency"></select>
+                <!-- <select class="form-control" ng-options="currency.code as (currency.description + ' ('+currency.symbol + ')') for currency in currencies" ng-model="to_currency"></select> -->
+                <select class="form-control" ng-model="to_currency">
+                  <option label="United States Dollar ($)" value="USD" selected="selected">United States Dollar ($)</option>
+                </select> 
               </div>
           </div>
           <div class="form-group">

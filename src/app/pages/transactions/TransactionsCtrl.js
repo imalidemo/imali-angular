@@ -42,8 +42,8 @@
 
         $scope.transactions = [];
         $scope.to_amount = null;
-        $scope.from_currency = "USD";
-        $scope.to_currency = "INR";
+        $scope.from_currency = "NGN";
+        $scope.to_currency = "USD";
         $scope.tab = "get_quote";
         $scope.loadingQuote = false;
         $scope.savingQuote = false;

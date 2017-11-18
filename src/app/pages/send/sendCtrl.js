@@ -9,7 +9,29 @@
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
         $scope.showSendTo = true;
+        $scope.loadingUserInfo = true;
+        
+        vm.getActiveQuotes = function() {
+          $http.get(environmentConfig.EXCHANGE_API + '/user/quotes/?status=active', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': vm.token
+                }
+            }).then(function (res) {
+                console.log(res);
+                $location.path(res.data.data.length == 0 ? '/transactions' : "/quote");
+            }).catch(function (error) {
+                $scope.loadingUserInfo = false;
+                if(error.status == 403 || error.status == 401){
+                    errorHandler.handle403();
+                    return;
+                }
+                errorToasts.evaluateErrors(error.data);
+            });
 
+        }  
+        vm.getActiveQuotes();
+      
         vm.getUserAccounts = function(){
             if(vm.token) {
                 $scope.loadingUserInfo = true;
@@ -34,7 +56,7 @@
                 });
             }
         };
-        vm.getUserAccounts();
+        // vm.getUserAccounts();
 
         $scope.send = function(recipient, amount, debit_note){
             if(vm.token) {

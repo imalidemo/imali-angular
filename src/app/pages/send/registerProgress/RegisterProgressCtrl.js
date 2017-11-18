@@ -179,7 +179,7 @@
                 errorToasts.evaluateErrors(error.data);
             });
         };
-        vm.getEthereumAddresses();
+        // vm.getEthereumAddresses();
         
 
     }

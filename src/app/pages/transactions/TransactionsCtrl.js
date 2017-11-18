@@ -5,8 +5,8 @@
         .controller('TransactionsCtrl', TransactionsCtrl);
 
     /** @ngInject */
-    function TransactionsCtrl($scope,environmentConfig,$http,cookieManagement,$uibModal,errorToasts,$state,$window,errorHandler) {
-
+    function TransactionsCtrl($location,$scope,environmentConfig,$http,cookieManagement,$uibModal,errorToasts,$state,$window,errorHandler) {
+      
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
 
@@ -15,8 +15,38 @@
             pageNo: 1,
             maxSize: 5
         };
+        
+        $scope.currencies = [
+              {
+                "code": "USD",
+                "description": "United States Dollar",
+                "symbol": "$",
+                "unit": "dollar",
+                "divisibility": 2,
+                "enabled": true
+              },
+              {
+                "code": "NGN",
+                "description": "Nigerian Naira",
+                "symbol": "\u20a6",
+                "unit": "naira",
+                "divisibility": 2,
+                "enabled": true
+              },
+        ];      
+
+        $scope.getCurrency = function(code) {
+          var result = $.grep($scope.currencies, function(e){ return e.code == code; });
+          return result.length == 0 ? {} : result[0];
+        }
 
         $scope.transactions = [];
+        $scope.to_amount = null;
+        $scope.from_currency = "USD";
+        $scope.to_currency = "INR";
+        $scope.tab = "get_quote";
+        $scope.loadingQuote = false;
+        $scope.savingQuote = false;
         $scope.transactionsStateMessage = '';
         $scope.transactionsData = {};
         $scope.loadingTransactions = false;
@@ -31,47 +61,6 @@
 
             return environmentConfig.API + '/transactions/' + vm.filterParams;
         };
-
-        $scope.getLatestTransactions = function(){
-            if(vm.token) {
-                $scope.transactionsStateMessage = '';
-                $scope.loadingTransactions = true;
-
-                if ($scope.transactions.length > 0) {
-                    $scope.transactions.length = 0;
-                }
-
-                var transactionsUrl = vm.getTransactionUrl();
-
-                $http.get(transactionsUrl, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': vm.token
-                    }
-                }).then(function (res) {
-                    $scope.loadingTransactions = false;
-                    if (res.status === 200) {
-                        $scope.transactionsData = res.data.data;
-                        $scope.transactions = $scope.transactionsData.results;
-                        if ($scope.transactions == 0) {
-                            $scope.transactionsStateMessage = 'No transactions have been made';
-                            return;
-                        }
-
-                        $scope.transactionsStateMessage = '';
-                    }
-                }).catch(function (error) {
-                    $scope.loadingTransactions = false;
-                    if (error.status == 403) {
-                        errorHandler.handle403();
-                        return
-                    }
-                    $scope.transactionsStateMessage = 'Failed To Load Data';
-                    errorToasts.evaluateErrors(error.data);
-                });
-            }
-        };
-        $scope.getLatestTransactions();
 
         $scope.openModal = function (page, size,transaction) {
             vm.theModal = $uibModal.open({
@@ -104,6 +93,72 @@
             }, function(){
             });
         };
+
+        $scope.getQuote = function(from_currency,to_currency,from_amount) {
+          $scope.to_amount = null;
+          if(vm.token) {
+              var currency = $scope.getCurrency(from_currency);
+              from_amount = from_amount * Math.pow(10, currency.divisibility);
+              $scope.loadingQuote = true;
+              $http({url:environmentConfig.EXCHANGE_API + '/convert/', 
+                method: "GET",
+                params: {
+                    from_amount: from_amount,
+                    from_currency: from_currency,
+                    to_currency: to_currency,
+                }, 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': vm.token
+                }
+              }).then(function (res) {
+                  $scope.loadingQuote = false;
+                  $scope.to_amount = res.data.data.to_amount/100;
+                  $scope.changeTab("show_quote");
+              }).catch(function (error) {
+                  $scope.loadingQuote = false;
+                  if(error.status == 403){
+                      errorHandler.handle403();
+                      return;
+                  }
+                  errorToasts.evaluateErrors(error.data);
+              });
+            }
+        }
+
+        $scope.saveQuote = function(from_currency,to_currency,from_amount) {
+          if(vm.token) {
+              var currency = $scope.getCurrency(from_currency);
+              from_amount = from_amount * Math.pow(10, currency.divisibility);
+              $scope.savingQuote = true;
+              $http({url:environmentConfig.EXCHANGE_API + '/user/quotes/', 
+                method: "POST",
+                data: {
+                    from_amount: from_amount,
+                    from_currency: from_currency,
+                    to_currency: to_currency,
+                }, 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': vm.token
+                }
+              }).then(function (res) {
+                  $location.path('/quote');
+              }).catch(function (error) {
+                  $scope.savingQuote = false;
+                  if(error.status == 403){
+                      errorHandler.handle403();
+                      return;
+                  }
+                  errorToasts.evaluateErrors(error.data);
+              });
+            }
+
+        }
+
+        $scope.changeTab = function(tabName) {
+          $scope.tab = tabName;
+        }
 
     }
 })();

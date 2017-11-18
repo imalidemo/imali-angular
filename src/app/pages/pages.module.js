@@ -11,6 +11,7 @@
     'BlurAdmin.pages.send',
     'BlurAdmin.pages.receive',
     'BlurAdmin.pages.transactions',
+    'BlurAdmin.pages.quote',
     'BlurAdmin.pages.login',
     'BlurAdmin.pages.register',
     'BlurAdmin.pages.verifyMobile',

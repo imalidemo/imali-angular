@@ -21,9 +21,6 @@
                 templateUrl: 'app/pages/settings/settings.html',
                 controller: "SettingsCtrl",
                 title: 'Settings',
-                sidebarMeta: {
-                    order: 400
-                }
             });
     }
 

@@ -1,6 +1,6 @@
 <div class="panel col-md-8" ng-hide="loadingQuotes">
     <h2>Your Active Quote</h2>
-    <button ng-click='modifyQuote({status: "cancel"})' ng-hide="active_quote.payment_claim" class="btn btn-primary pull-right">Cancel</button>
+    <button ng-click='modifyQuote({status: "cancel"})' class="btn btn-primary pull-right">Cancel</button>
     <h3 class="bank-account-title">{{active_quote.from_currency.symbol}} {{active_quote.from_amount}}
   to {{active_quote.to_currency.symbol}} {{active_quote.to_amount}}</h3>
 </div>
@@ -9,15 +9,18 @@
 <div class="panel col-md-8" style="padding-top:20px;padding-bottom:15px;" ng-show='tab == "bank" && !(loading || loadingQuotes)'>
     <h2>Select Bank Account to send to</h2>
     <select class="form-control" ng-options="account.id as (account.bank_name + ' ' + account.number)  for account in bankAccounts" ng-model="selected_account"></select>
-    <div ba-panel ba-panel-class="light-text with-scroll" ng-show="selected_account == -1">
-        <form name="bankAccountForm" class="custom-form">
+    <form name="bankAccountForm" class="custom-form">
+      <div ba-panel ba-panel-class="light-text with-scroll" ng-show="selected_account == -1">
+        <h4>Recipient Email Address <span class="required-icon">*</span></h4>
+          <div class="form-group">
+              <input type="email" ng-model="newBankData.email" class="form-control"  placeholder="E.g hello@example.com" required>
+          </div>
+      </div>
+      <div ba-panel ba-panel-class="light-text with-scroll" ng-show="selected_account == -1">
+        <h4>Bank Account Details</h4>
             <div class="form-group">
                 <label><strong>Account name/holder</strong> <span class="required-icon">*</span></label>
                 <input type="text" ng-model="newBankData.name" class="form-control"  placeholder="E.g Currency Corp" required>
-            </div>
-            <div class="form-group">
-                <label><strong>Account holder email</strong> <span class="required-icon">*</span></label>
-                <input type="email" ng-model="newBankData.email" class="form-control"  placeholder="E.g hello@example.com" required>
             </div>
             <div class="form-group">
                 <label><strong>Account number <span class="required-icon">*</span></strong></label>
@@ -63,8 +66,8 @@
             <div class="form-group">
                 <button ng-disabled="!bankAccountForm.$valid" ng-click="addBankAccount(newBankData)" class="btn btn-primary pull-right">Add</button>
             </div>
-        </form>
-    </div>
+      </div>
+    </form>
     <div ba-panel ba-panel-class="light-text" ng-hide="selected_account == -1">
         <h3 class="bank-account-title">{{getSelectedAccount().bank_name}}, {{getSelectedAccount().number}}</h3>
         <button ng-click="modifyQuote({bank: selected_account})" class="btn btn-primary pull-right">Next</button>

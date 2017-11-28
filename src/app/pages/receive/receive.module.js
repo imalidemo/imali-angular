@@ -12,9 +12,6 @@
           templateUrl: 'app/pages/receive/receive.html',
           controller: 'ReceiveCtrl',
           title: 'Receive',
-          sidebarMeta: {
-            order: 1
-          }
         });
   }
 

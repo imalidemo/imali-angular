@@ -12,9 +12,6 @@
           templateUrl: 'app/pages/send/send.html',
           controller: 'SendCtrl',
           title: 'Send',
-          sidebarMeta: {
-            order: 0
-          }
         });
   }
 

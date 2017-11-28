@@ -14,9 +14,9 @@
                     code: null
                 },
                 controller: "TransactionsCtrl",
-                title: 'Transactions',
+                title: 'Send Money',
                 sidebarMeta: {
-                    order: 100
+                    order: 1
                 }
             });
     }

@@ -1,12 +1,13 @@
-<div class="panel col-md-8" ng-hide='loadingQuotes'>
+<div class="panel col-md-12" ng-hide='loadingQuotes'>
   <h2>Transaction History</h2>
   <table class="table" ng-hide="quotes.length == 0">
     <thead>
       <tr>
         <th>ID</th>
         <th>Date</th>
-        <th>From Amount</th>
-        <th>To Amount</th>
+        <th>Sent Amount</th>
+        <th>Recipient</th>
+        <th>Recieved Amount</th>
         <th>Conversion Rate</th>
         <th>Status</th>
       </tr>
@@ -16,6 +17,7 @@
         <td>{{quote.id}}</td>
         <td>{{quote.created}}</td>
         <td>{{quote.from_currency.symbol}} {{quote.from_amount}}</td>
+        <td>{{quote.recipient_email}}</td>
         <td>{{quote.to_currency.symbol}} {{quote.to_amount}}</td>
         <td>{{quote.exchange_rate.toString()}}</td>
         <td>{{quote.status}}</td>

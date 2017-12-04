@@ -94,6 +94,28 @@
             });
         };
 
+        vm.getActiveQuotes = function() {
+          $http.get(environmentConfig.EXCHANGE_API + '/user/quotes/?status=active', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': vm.token
+                }
+            }).then(function (res) {
+                console.log(res);
+                $location.path(res.data.data.length == 0 ? '/transactions' : "/quote");
+            }).catch(function (error) {
+                $scope.loadingUserInfo = false;
+                if(error.status == 403 || error.status == 401){
+                    errorHandler.handle403();
+                    return;
+                }
+                errorToasts.evaluateErrors(error.data);
+            });
+
+        }  
+        vm.getActiveQuotes();
+      
+
         $scope.getQuote = function(from_currency,to_currency,from_amount) {
           $scope.to_amount = null;
           if(vm.token) {

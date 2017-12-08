@@ -11,7 +11,10 @@
           url: '/home',
           templateUrl: 'app/pages/send/send.html',
           controller: 'SendCtrl',
-          title: 'Send',
+          title: 'Send Money',
+          sidebarMeta: {
+            order: 1
+          }
         });
   }
 

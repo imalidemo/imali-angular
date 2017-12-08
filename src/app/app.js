@@ -93,7 +93,7 @@ angular.module('BlurAdmin', [
                     $rootScope.notRegistering = true;
                     $rootScope.gotToken = true;
                     $rootScope.registerProgress = false;
-                    if(newUrl.indexOf('home') > 0 || newUrl.indexOf('mobile/confirm') > 0 || newUrl.indexOf('mobile/verify') > 0
+                    if(newUrl.indexOf('mobile/confirm') > 0 || newUrl.indexOf('mobile/verify') > 0
                         || newUrl.indexOf('document/verify/ID') > 0 || newUrl.indexOf('/document/verify/residence') > 0
                         || newUrl.indexOf('ethereum/address') > 0 || newUrl.indexOf('identity/verification') > 0)
                     {

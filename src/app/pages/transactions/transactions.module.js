@@ -14,7 +14,7 @@
                     code: null
                 },
                 controller: "TransactionsCtrl",
-                title: 'Send Money',
+                title: 'Transactions',
                 sidebarMeta: {
                     order: 1
                 }

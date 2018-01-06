@@ -80,7 +80,8 @@
     <h3>You have successfully claimed the payment.</h3>
     <h3>Admin will confirm the payment and transfer the amount to recipient thenceforth.</h3>
   </div>
-  <div ng-hide="active_quote.payment_claim">
+  <!-- <div ng-hide="active_quote.payment_claim"> -->
+  <div>
     <h3>Make a payment of {{active_quote.from_currency.symbol}} {{active_quote.from_amount}} to the following bank account </h3>
     <table class="table table-bordered">  
       <tr class="active">
@@ -120,7 +121,7 @@
         <td>{{companyBankData.swift}}</td>
       </tr>
     </table>
-    <h3>
+    <h3 ng-hide="active_quote.payment_claim">
       <button ng-click='modifyQuote({claim_payment: true})' class="btn btn-primary pull-right" style="width:auto;padding-left:5px;padding-right:5px;">Confirm Payment</button>
       Click this button after you have made the payment
     </h3>

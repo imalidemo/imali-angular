@@ -1,6 +1,6 @@
-PROJECT_NAME: echarge-demo
-NAMESPACE: echarge-demo
-IMAGE: gcr.io/rehive-services/echarge-demo
-VIRTUAL_HOST: echarge.demos.rehive.io
+PROJECT_NAME: imali-demo
+NAMESPACE: imali-demo
+IMAGE: gcr.io/rehive-services/imali-demo
+VIRTUAL_HOST: imali.demos.rehive.io
 CLUSTER: production
 CLUSTER_PROJECT: rehive-services

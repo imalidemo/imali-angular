@@ -11,7 +11,7 @@
           url: '/quote',
           templateUrl: 'app/pages/quote/quote.html',
           controller: 'QuoteCtrl',
-          title: 'Your Quote',
+          title: 'Your quote',
         });
   }
 

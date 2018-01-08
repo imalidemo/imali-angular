@@ -1,134 +1,264 @@
 <div class="panel col-md-8" ng-hide="loadingQuotes">
-    <h2>Your Active Quote</h2>
-    <button ng-click='modifyQuote({status: "cancel"})' class="btn btn-primary pull-right">Cancel</button>
-    <h3 class="bank-account-title">{{active_quote.from_currency.symbol}} {{active_quote.from_amount}}
-  to {{active_quote.to_currency.symbol}} {{active_quote.to_amount}}</h3>
+    <div class="panel-heading"><h2>Your quote</h2></div>
+    <div class="panel-body">
+        <p><strong>You send</strong></p>
+        <p>
+            {{active_quote.from_currency.symbol}} {{active_quote.from_amount}}
+
+        </p>
+        <p><strong>They receive</strong></p>
+        <p>
+            {{active_quote.to_currency.symbol}} {{active_quote.to_amount}}
+        </p>
+    </div>
+    <loading-image ng-show="loading"></loading-image>
+    <div class="panel-btn">
+        <button ng-click='modifyQuote({status: "cancel"})' class="btn btn-danger pull-right">Cancel</button>
+    </div>
 </div>
-
 <!-- SELECT BANK TAB -->
-<div class="panel col-md-8" style="padding-top:20px;padding-bottom:15px;" ng-show='tab == "bank" && !(loading || loadingQuotes)'>
-    <h2>Select Bank Account to send to</h2>
-    <select class="form-control" ng-options="account.id as (account.bank_name + ' ' + account.number)  for account in bankAccounts" ng-model="selected_account"></select>
-    <form name="bankAccountForm" class="custom-form">
-      <div ba-panel ba-panel-class="light-text with-scroll" ng-show="selected_account == -1">
-        <h4>Recipient Email Address <span class="required-icon">*</span></h4>
-          <div class="form-group">
-              <input type="email" ng-model="newBankData.email" class="form-control"  placeholder="E.g hello@example.com" required>
-          </div>
-      </div>
-      <div ba-panel ba-panel-class="light-text with-scroll" ng-show="selected_account == -1">
-        <h4>Bank Account Details</h4>
-            <div class="form-group">
-                <label><strong>Account name/holder</strong> <span class="required-icon">*</span></label>
-                <input type="text" ng-model="newBankData.name" class="form-control"  placeholder="E.g Currency Corp" required>
-            </div>
-            <div class="form-group">
-                <label><strong>Account number <span class="required-icon">*</span></strong></label>
-                <input type="text" ng-model="newBankData.number" class="form-control"  placeholder="E.g 5246357653" required>
-            </div>
-            <div class="form-group">
-                <label><strong>Account type</strong></label>
-                <input type="text" ng-model="newBankData.type" class="form-control"  placeholder="E.g Cheque/Current/Savings">
-            </div>
-            <div class="form-group">
-                <label><strong>Bank name</strong> <span class="required-icon">*</span></label>
-                <input type="text" ng-model="newBankData.bank_name" class="form-control"  placeholder="E.g Saharah Bank Ltd" required>
-            </div>
+<div class="panel col-md-8" ng-show='tab == "bank" && !(loading || loadingQuotes)'>
+    <div class="panel-heading"><h2>Select recipient</h2></div>
 
-            <div class="form-group">
-                <label><strong>Bank code</strong></label>
-                <input type="text" ng-change="bankAccountChanged('bank_code')" ng-model="newBankData.bank_code" class="form-control"  placeholder="E.g 342543">
+    <div class="panel-body">
+        <select class="form-control"
+                ng-options="account.id as (account.name + ' ' + account.bank_name + ' ' + account.number)  for account in bankAccounts"
+                ng-model="selected_account"></select>
+        <hr>
+        <div ng-hide="selected_account == -1">
+
+            <div class="row divider">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <table class="table user-details-table">
+                        <tr>
+                            <th width="2%"></th>
+                            <th width="20%" class="user-bank-table-th-title">Account name</th>
+                            <th width="8%"></th>
+                            <th width="20%" class="user-bank-table-th">{{getSelectedAccount().bank_name || 'Not
+                                provided'}}
+                            </th>
+                            <th width="50%"></th>
+                        </tr>
+                        <tr>
+                            <th width="2%"></th>
+                            <th width="20%" class="user-bank-table-th-title">Account number</th>
+                            <th width="8%"></th>
+                            <th width="20%" class="user-bank-table-th">{{getSelectedAccount().number || 'Not
+                                provided'}}
+                            </th>
+                            <th width="50%"></th>
+                        </tr>
+                        <tr>
+                            <th width="2%"></th>
+                            <th width="20%" class="user-bank-table-th-title">Account type</th>
+                            <th width="8%"></th>
+                            <th width="20%" class="user-bank-table-th">{{getSelectedAccount().type || 'Not provided'}}
+                            </th>
+                            <th width="50%"></th>
+                        </tr>
+                        <tr>
+                            <th width="2%"></th>
+                            <th width="20%" class="user-bank-table-th-title">Bank name</th>
+                            <th width="8%"></th>
+                            <th width="20%" class="user-bank-table-th">{{getSelectedAccount().bank_name || 'Not
+                                provided'}}
+                            </th>
+                            <th width="50%"></th>
+                        </tr>
+                        <tr>
+                            <th width="2%"></th>
+                            <th width="20%" class="user-bank-table-th-title">Bank code</th>
+                            <th width="8%"></th>
+                            <th width="20%" class="user-bank-table-th">{{getSelectedAccount().bank_code || 'Not
+                                provided'}}
+                            </th>
+                            <th width="50%"></th>
+                        </tr>
+                        <tr>
+                            <th width="2%"></th>
+                            <th width="20%" class="user-bank-table-th-title">Branch code</th>
+                            <th width="8%"></th>
+                            <th width="20%" class="user-bank-table-th">{{getSelectedAccount().branch_code || 'Not
+                                provided'}}
+                            </th>
+                            <th width="50%"></th>
+                        </tr>
+                        <tr>
+                            <th width="2%"></th>
+                            <th width="20%" class="user-bank-table-th-title">Swift</th>
+                            <th width="8%"></th>
+                            <th width="20%" class="user-bank-table-th">{{getSelectedAccount().swift || 'Not
+                                provided'}}
+                            </th>
+                            <th width="50%"></th>
+                        </tr>
+                        <tr>
+                            <th width="2%"></th>
+                            <th width="20%" class="user-bank-table-th-title">IBAN</th>
+                            <th width="8%"></th>
+                            <th width="20%" class="user-bank-table-th">{{getSelectedAccount().iban || 'Not provided'}}
+                            </th>
+                            <th width="50%"></th>
+                        </tr>
+                        <tr>
+                            <th width="2%"></th>
+                            <th width="20%" class="user-bank-table-th-title">BIC</th>
+                            <th width="8%"></th>
+                            <th width="20%" class="user-bank-table-th">{{getSelectedAccount().bic || 'Not provided'}}
+                            </th>
+                            <th width="50%"></th>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div class="form-group">
-                <label><strong>Branch code</strong></label>
-                <input type="text" ng-model="newBankData.branch_code" class="form-control"  placeholder="E.g 456798">
-            </div>
-            <!--<div class="form-group">-->
+        </div>
+    </div>
+    <div class="panel-btn" ng-hide="selected_account == -1">
+        <button ng-click="modifyQuote({bank: selected_account})" class="btn btn-primary pull-right">Next
+        </button>
+    </div>
+    <div class="panel-body" ng-show="selected_account == -1">
+        <p><strong>Add a new recipient</strong></p>
+        <form name="bankAccountForm">
+            <div>
+                <div class="form-group">
+                    <label><strong>Recipient email <span class="required-icon">*</span></strong></label>
+                    <input type="email" ng-model="newBankData.email" class="form-control"
+                           placeholder="E.g hello@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label><strong>Account name/holder</strong> <span class="required-icon">*</span></label>
+                    <input type="text" ng-model="newBankData.name" class="form-control" placeholder="E.g Currency Corp"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label><strong>Account number <span class="required-icon">*</span></strong></label>
+                    <input type="text" ng-model="newBankData.number" class="form-control" placeholder="E.g 5246357653"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label><strong>Bank name</strong> <span class="required-icon">*</span></label>
+                    <input type="text" ng-model="newBankData.bank_name" class="form-control"
+                           placeholder="E.g Saharah Bank Ltd" required>
+                </div>
+                <div class="form-group">
+                    <label><strong>Account type</strong></label>
+                    <input type="text" ng-model="newBankData.type" class="form-control"
+                           placeholder="E.g Cheque/Current/Savings">
+                </div>
+                <div class="form-group">
+                    <label><strong>Bank code</strong></label>
+                    <input type="text" ng-change="bankAccountChanged('bank_code')" ng-model="newBankData.bank_code"
+                           class="form-control" placeholder="E.g 342543">
+                </div>
+                <div class="form-group">
+                    <label><strong>Branch code</strong></label>
+                    <input type="text" ng-model="newBankData.branch_code" class="form-control" placeholder="E.g 456798">
+                </div>
+                <!--<div class="form-group">-->
                 <!--<label><strong>Bank/Branch Address</strong></label>-->
                 <!--<input type="text" ng-model="s" class="form-control divider"  placeholder="Address line 1">-->
                 <!--<input type="text" ng-model="d" class="form-control divider"  placeholder="Address line 2">-->
                 <!--<input type="text" ng-model="f" class="form-control divider"  placeholder="City">-->
                 <!--<country-select class="form-control pointer divider" data-ng-model="q"></country-select>-->
                 <!--<input type="text" ng-model="r" class="form-control divider"  placeholder="Code/Zipcode">-->
-            <!--</div>-->
-            <div class="form-group">
-                <label><strong>Swift</strong></label>
-                <input type="text" ng-model="newBankData.swift" class="form-control"  placeholder="E.g FDDODUMM">
+                <!--</div>-->
+                <div class="form-group">
+                    <label><strong>Swift</strong></label>
+                    <input type="text" ng-model="newBankData.swift" class="form-control" placeholder="E.g FDDODUMM">
+                </div>
+                <div class="form-group">
+                    <label><strong>Iban</strong></label>
+                    <input type="text" ng-model="newBankData.iban" class="form-control"
+                           placeholder="E.g DE41700333001189190812">
+                </div>
+                <div class="form-group">
+                    <label><strong>Bic</strong></label>
+                    <input type="text" ng-model="newBankData.bic" class="form-control" placeholder="E.g FDDODUMMXXX">
+                </div>
+                <div class="form-group">
+                    <button ng-disabled="!bankAccountForm.$valid" ng-click="addBankAccount(newBankData)"
+                            class="btn btn-primary pull-right">Add
+                    </button>
+                </div>
             </div>
-            <div class="form-group">
-                <label><strong>Iban</strong></label>
-                <input type="text" ng-model="newBankData.iban" class="form-control"  placeholder="E.g DE41700333001189190812">
-            </div>
-            <div class="form-group">
-                <label><strong>Bic</strong></label>
-                <input type="text" ng-model="newBankData.bic" class="form-control"  placeholder="E.g FDDODUMMXXX">
-            </div>
-            <div class="form-group">
-                <button ng-disabled="!bankAccountForm.$valid" ng-click="addBankAccount(newBankData)" class="btn btn-primary pull-right">Add</button>
-            </div>
-      </div>
-    </form>
-    <div ba-panel ba-panel-class="light-text" ng-hide="selected_account == -1">
-        <h3 class="bank-account-title">{{getSelectedAccount().bank_name}}, {{getSelectedAccount().number}}</h3>
-        <button ng-click="modifyQuote({bank: selected_account})" class="btn btn-primary pull-right">Next</button>
+        </form>
     </div>
 </div>
 
 <!-- MAKE PAYMENT TAB -->
-<div class="panel col-md-8" style="padding-top:20px;padding-bottom:15px;" ng-show='tab == "payment" && !loading'>
-  <div ng-show="active_quote.payment_claim">
-    <h3>You have successfully claimed the payment.</h3>
-    <h3>Admin will confirm the payment and transfer the amount to recipient thenceforth.</h3>
-  </div>
-  <!-- <div ng-hide="active_quote.payment_claim"> -->
-  <div>
-    <h3>Make a payment of {{active_quote.from_currency.symbol}} {{active_quote.from_amount}} to the following bank account </h3>
-    <table class="table table-bordered">  
-      <tr class="active">
-        <td class="success">Bank Name</td>
-        <td class="success">{{companyBankData.bank_name}}</td>
-      </tr>
-      <tr class="active">
-        <td class="warning">Holder Name</td>
-        <td class="warning">{{companyBankData.name}}</td>
-      </tr>
-      <tr class="active">
-        <td class="info">Account Number</td>
-        <td class="info">{{companyBankData.number}}</td>
-      </tr>
-      <tr class="active" ng-show="companyBankData.type">
-        <td>Account Type</td>
-        <td>{{companyBankData.type}}</td>
-      </tr>
-      <tr class="active" ng-show="companyBankData.branch_code">
-        <td>Branch Code</td>
-        <td>{{companyBankData.branch_code}}</td>
-      </tr>
-      <tr class="active" ng-show="companyBankData.bank_code">
-        <td>Bank Code</td>
-        <td>{{companyBankData.bank_code}}</td>
-      </tr>
-      <tr class="active" ng-show="companyBankData.iban">
-        <td>IBAN</td>
-        <td>{{companyBankData.iban}}</td>
-      </tr>
-      <tr class="active" ng-show="companyBankData.bic">
-        <td>BIC</td>
-        <td>{{companyBankData.bic}}</td>
-      </tr>
-      <tr class="active" ng-show="companyBankData.swift">
-        <td>Swift Code</td>
-        <td>{{companyBankData.swift}}</td>
-      </tr>
-    </table>
-    <h3 ng-hide="active_quote.payment_claim">
-      <button ng-click='modifyQuote({claim_payment: true})' class="btn btn-primary pull-right" style="width:auto;padding-left:5px;padding-right:5px;">Confirm Payment</button>
-      Click this button after you have made the payment
-    </h3>
-  </div>
+<div class="panel col-md-8" ng-show='tab == "payment" && !loading'>
+    <div ng-show="active_quote.payment_claim">
+        <div class="panel-heading"><h2>Payment claimed</h2></div>
+        <p>If you see this message, it means you've indicated that you've made the payment. Our team will first
+            wait for the payment to clear successfully. After that we'll process the transfer and let you know when
+            the payout has been completed.
+        </p>
+    </div>
+
+    <!-- <div ng-hide="active_quote.payment_claim"> -->
+
+    <div class="panel-heading" ng-hide="active_quote.payment_claim"><h2>Make payment</h2></div>
+    <div class="panel-body">
+        <p ng-hide="active_quote.payment_claim">You have to transfer exactly {{active_quote.from_currency.symbol}}
+            {{active_quote.from_amount}} to the bank
+            details below.</p>
+        <hr ng-hide="active_quote.payment_claim">
+        <table class="table table-bordered">
+            <tr class="active">
+                <td class="success">Bank Name</td>
+                <td class="success">{{companyBankData.bank_name}}</td>
+            </tr>
+            <tr class="active">
+                <td class="warning">Holder Name</td>
+                <td class="warning">{{companyBankData.name}}</td>
+            </tr>
+            <tr class="active">
+                <td class="info">Account Number</td>
+                <td class="info">{{companyBankData.number}}</td>
+            </tr>
+            <tr class="active" ng-show="companyBankData.type">
+                <td>Account Type</td>
+                <td>{{companyBankData.type}}</td>
+            </tr>
+            <tr class="active" ng-show="companyBankData.branch_code">
+                <td>Branch Code</td>
+                <td>{{companyBankData.branch_code}}</td>
+            </tr>
+            <tr class="active" ng-show="companyBankData.bank_code">
+                <td>Bank Code</td>
+                <td>{{companyBankData.bank_code}}</td>
+            </tr>
+            <tr class="active" ng-show="companyBankData.iban">
+                <td>IBAN</td>
+                <td>{{companyBankData.iban}}</td>
+            </tr>
+            <tr class="active" ng-show="companyBankData.bic">
+                <td>BIC</td>
+                <td>{{companyBankData.bic}}</td>
+            </tr>
+            <tr class="active" ng-show="companyBankData.swift">
+                <td>Swift Code</td>
+                <td>{{companyBankData.swift}}</td>
+            </tr>
+        </table>
+    </div>
 </div>
 
-<!-- LOADING PANEL SCREEN -->
-<div ba-panel ng-show='loading || loadingQuotes'>
-    <loading-image></loading-image>
+<div ng-hide="active_quote.payment_claim">
+    <div class="panel col-md-8" ng-show='tab == "payment" && !loading'>
+        <div class="panel-heading"><h2>Confirm payment</h2></div>
+        <div class="panel-body">
+            <p>
+                Click this button once you've successfully made a payment to the bank details shown above. Please do not
+                click this button if you have not yet made a payment yet.
+            </p>
+        </div>
+        <div class="panel-btn">
+            <button ng-click='modifyQuote({claim_payment: true})'
+                    style="width:auto; padding-left:10px; padding-right:10px;" class="btn btn-default pull-right">I have
+                made the payment
+            </button>
+        </div>
+    </div>
 </div>

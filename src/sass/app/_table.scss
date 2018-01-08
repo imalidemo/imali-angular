@@ -1,3 +1,27 @@
 .table-panel {
   height: 295px;
 }
+
+.user-bank-table-th-title{
+  text-align: right;
+  color: #979797;
+}
+
+.user-bank-table-th{
+  text-align: left;
+}
+
+.user-details-table > tbody > tr {
+  &  > th{
+    font-size: 14px;
+    padding: 0;
+    vertical-align: middle;
+    line-height: 25px;
+  }
+  &  > td{
+    font-size: 14px;
+    padding: 0;
+    vertical-align: middle;
+    line-height: 25px;
+  }
+}

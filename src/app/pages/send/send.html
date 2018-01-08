@@ -1,36 +1,20 @@
 <div class="panel col-md-6" ng-show='tab=="get_quote" && !loading'>
-    <div class="panel-heading"><h2 class="custom-buy-with-header">Get Quote</h2></div>
+    <div class="panel-heading"><h2>Send money</h2></div>
     <div class="panel-body">
-        <form class="form-horizontal col-lg-12 custom-form-body">
-          <div class="form-group">
-              <label class="col-sm-2 control-label"><strong>From </strong></label>
-              <div class="col-sm-10">
-                <!-- <select class="form-control" ng-options="currency.code as (currency.description + ' ('+currency.symbol + ')') for currency in currencies" ng-model="from_currency"></select> -->
-                <select class="form-control" ng-model="from_currency">
-                  <option label="Nigerian Naira (₦)" value="NGN">Nigerian Naira (₦)</option>
-                </select> 
-              </div>
-          </div>
-          <div class="form-group">
-              <label class="col-sm-2 control-label"><strong>To </strong></label>
-              <div class="col-sm-10">
-                <div class="alert alert-danger" ng-show="from_currency == to_currency">From and To currencies cannot be same</div>
-                <!-- <select class="form-control" ng-options="currency.code as (currency.description + ' ('+currency.symbol + ')') for currency in currencies" ng-model="to_currency"></select> -->
-                <select class="form-control" ng-model="to_currency">
-                  <option label="United States Dollar ($)" value="USD" selected="selected">United States Dollar ($)</option>
-                </select> 
-              </div>
-          </div>
-          <div class="form-group">
-              <label class="col-sm-2 control-label"><strong>Amount</strong></label>
-              <div class="col-sm-10">
-                  <input type="number" step="0.01" min="0" ng-model="from_amount" class="form-control" placeholder="Enter a valid amount">
-              </div>
-          </div>
-              <loading-image ng-show="loadingQuote"></loading-image>
+        <form class="form-horizontal">
+            <label class="control-label">Amount</label>
+            <div class="input-group">
+                <span class="input-group-addon addon-left input-group-addon-default">₦</span>
+                <input type="text" class="form-control with-default-addon" placeholder="0.00" ng-model="from_amount">
+                <span class="input-group-addon addon-right input-group-addon-default">NGN</span>
+            </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!from_amount || from_currency == to_currency" ng-click="getQuote(from_currency,to_currency,from_amount)" class="btn btn-primary pull-right">Get Quote</button>
+                    <button ng-disabled="!from_amount"
+                            ng-click="getQuote(from_currency,to_currency,from_amount)"
+                            class="btn btn-primary pull-right">Next
+                    </button>
+                    <loading-image ng-show="loadingQuote"></loading-image>
                 </div>
             </div>
         </form>
@@ -38,23 +22,24 @@
 </div>
 
 <div class="panel col-md-6" ng-show='tab=="show_quote" && !loading'>
-    <div class="panel-heading"><h2 class="custom-buy-with-header">Your Quote</h2></div>
+    <div class="panel-heading"><h2>Confirm quote</h2></div>
     <div class="panel-body">
-        <h3 ng-hide="loadingQuote">
-          Amount: {{getCurrency(from_currency).symbol}} {{from_amount}}
-        </h3>
-        <h3 ng-hide="loadingQuote">
-          Converted Amount: {{getCurrency(to_currency).symbol}} {{to_amount}}
-        </h3>
-        <br>
-        <div class="col-xs-12" style="margin-top:20px;margin-bottom:15px;">
-          <button ng-disabled="savingQuote" ng-click="saveQuote(from_currency,to_currency,from_amount)" class="btn btn-primary pull-right">Accept</button>
-          <button ng-disabled="savingQuote" ng-click='changeTab("get_quote")' class="btn btn-primary pull-left">Back</button>
-          <loading-image ng-show="savingQuote"></loading-image>
-        </div>
-    </div>
-</div>
 
-<div ba-panel ng-show='loading'>
-  <loading-image></loading-image>
+        <p><strong>You send</strong></p>
+        <p ng-hide="loadingQuote">
+            {{getCurrency(from_currency).symbol}} {{from_amount}}
+        </p>
+        <p><strong>They receive</strong></p>
+        <p ng-hide="loadingQuote">
+            {{getCurrency(to_currency).symbol}} {{to_amount}}
+        </p>
+    </div>
+    <div class="panel-btn">
+        <loading-image ng-show="savingQuote"></loading-image>
+        <button ng-disabled="savingQuote" ng-click="saveQuote(to_currency,from_currency,from_amount)"
+                class="btn btn-primary pull-right">Accept
+        </button>
+        <button ng-disabled="savingQuote" ng-click='changeTab("get_quote")' class="btn btn-default pull-left">Back
+        </button>
+    </div>
 </div>

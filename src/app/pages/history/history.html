@@ -1,19 +1,16 @@
 <div class="panel col-md-12" ng-hide='loadingQuotes'>
-  <h2>Transaction History</h2>
-  <table class="table" ng-hide="quotes.length == 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Date</th>
-        <th>Sent Amount</th>
-        <th>Recipient</th>
-        <th>Recieved Amount</th>
-        <th>Conversion Rate</th>
-        <th>Status</th>
+  <div class="panel-heading"><h2>Quote history</h2></div>
+  <table class="table table-condensed table-striped table-hover " ng-hide="quotes.length == 0">
+      <tr class="black-muted-bg">
+        <th><strong>ID</strong></th>
+        <th><strong>Date</strong></th>
+        <th><strong>Sent Amount</strong></th>
+        <th><strong>Recipient</strong></th>
+        <th><strong>Recieved Amount</strong></th>
+        <th><strong>Conversion Rate</strong></th>
+        <th><strong>Status</strong></th>
       </tr>
-    </thead> 
-    <tbody ng-repeat="quote in quotes"> 
-      <tr>
+      <tr ng-repeat="quote in quotes">
         <td>{{quote.id}}</td>
         <td>{{quote.created}}</td>
         <td>{{quote.from_currency.symbol}} {{quote.from_amount}}</td>
@@ -22,10 +19,8 @@
         <td>{{quote.exchange_rate.toString()}}</td>
         <td>{{quote.status}}</td>
       </tr>
-    </thead> 
-    </tbody> 
   </table>
-  <h3 ng-show="quotes.length == 0">No quote history</h3>
+  <div ng-show="quotes.length == 0"><i>No quote history</i></div>
 </div>
 
 

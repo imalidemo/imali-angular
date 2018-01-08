@@ -96,7 +96,7 @@
         };
 
         vm.getActiveQuotes = function() {
-          $scope.loading = true;
+          // $scope.loading = true;
           $http.get(environmentConfig.EXCHANGE_API + '/user/quotes/?status=active', {
                 headers: {
                     'Content-Type': 'application/json',
@@ -160,8 +160,8 @@
                 method: "POST",
                 data: {
                     from_amount: from_amount,
-                    from_currency: from_currency,
-                    to_currency: to_currency,
+                    from_currency: to_currency,
+                    to_currency: from_currency
                 }, 
                 headers: {
                     'Content-Type': 'application/json',

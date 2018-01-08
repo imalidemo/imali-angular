@@ -1,5 +1,6 @@
 <div ng-hide="editingBankAccounts || loadingBankAccounts">
     <div ng-show="bankAccounts.length > 0" ba-panel class="setting-bank-accounts" ba-panel-title="Bank accounts" ba-panel-class="light-text with-scroll">
+        <br>
         <table class="table table-striped setting-bank-accounts-table">
             <tr ng-repeat="bankAccount in bankAccounts">
                 <th class="bank-account-title">{{bankAccount.bank_name}}, {{bankAccount.number}}</th>
@@ -10,6 +11,7 @@
         </table>
     </div>
     <div ba-panel ba-panel-title="Add bank account" ba-panel-class="light-text with-scroll">
+        <br>
         <form name="bankAccountForm" class="custom-form">
             <div class="form-group">
                 <label><strong>Account name/holder</strong> <span class="required-icon">*</span></label>

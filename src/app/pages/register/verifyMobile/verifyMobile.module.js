@@ -12,7 +12,10 @@
                 // views:{
                 // 'admin':{
                 templateUrl: 'app/pages/register/verifyMobile/verifyMobile.html',
-                controller: 'VerifyMobileCtrl'
+                controller: 'VerifyMobileCtrl',
+                params: {
+                    from: null
+                }
                     //     }
                     // }
                 });

@@ -17,22 +17,30 @@
         };
         
         $scope.currencies = [
-              {
+            {
                 "code": "USD",
                 "description": "United States Dollar",
                 "symbol": "$",
                 "unit": "dollar",
                 "divisibility": 2,
                 "enabled": true
-              },
-              {
+            },
+            {
                 "code": "NGN",
                 "description": "Nigerian Naira",
                 "symbol": "\u20a6",
                 "unit": "naira",
                 "divisibility": 2,
                 "enabled": true
-              },
+            },
+            {
+                "code":"GBP",
+                "description":"British Pound Sterling",
+                "symbol":"£",
+                "unit":"sterling",
+                "divisibility":2,
+                "enabled":true
+            }
         ];      
 
         $scope.getCurrency = function(code) {
@@ -95,61 +103,28 @@
             });
         };
 
-        vm.getActiveQuotes = function() {
-          // $scope.loading = true;
-          $http.get(environmentConfig.EXCHANGE_API + '/user/quotes/?status=active', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': vm.token
-                }
-            }).then(function (res) {
-                console.log(res);
-                $scope.loading = false;
-                $location.path(res.data.data.length == 0 ? '/send' : "/quote");
-            }).catch(function (error) {
-                $scope.loadingUserInfo = false;
-                if(error.status == 403 || error.status == 401){
-                    errorHandler.handle403();
-                    return;
-                }
-                errorToasts.evaluateErrors(error.data);
-            });
-
-        }  
-        vm.getActiveQuotes();
-      
-
-        $scope.getQuote = function(from_currency,to_currency,from_amount) {
-          $scope.to_amount = null;
-          if(vm.token) {
-              var currency = $scope.getCurrency(from_currency);
-              from_amount = from_amount * Math.pow(10, currency.divisibility);
-              $scope.loadingQuote = true;
-              $http({url:environmentConfig.EXCHANGE_API + '/convert/', 
-                method: "GET",
-                params: {
-                    from_amount: from_amount,
-                    from_currency: from_currency,
-                    to_currency: to_currency,
-                }, 
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': vm.token
-                }
-              }).then(function (res) {
-                  $scope.loadingQuote = false;
-                  $scope.to_amount = res.data.data.to_amount/100;
-                  $scope.changeTab("show_quote");
-              }).catch(function (error) {
-                  $scope.loadingQuote = false;
-                  if(error.status == 403){
-                      errorHandler.handle403();
-                      return;
-                  }
-                  errorToasts.evaluateErrors(error.data);
-              });
+        $http({url:environmentConfig.EXCHANGE_API + '/user/rates/',
+            method: "GET",
+            params: {
+                from_currency: "NGN",
+                to_currency: "USD",
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': vm.token
             }
-        }
+        }).then(function (res) {
+            $scope.loadingQuote = false;
+            $scope.to_amount = res.data.data.to_amount/100;
+            $scope.changeTab("show_quote");
+        }).catch(function (error) {
+            $scope.loadingQuote = false;
+            if(error.status == 403){
+                errorHandler.handle403();
+                return;
+            }
+            errorToasts.evaluateErrors(error.data);
+        });
 
         $scope.saveQuote = function(from_currency,to_currency,from_amount) {
           if(vm.token) {
@@ -178,6 +153,9 @@
                   errorToasts.evaluateErrors(error.data);
               });
             }
+
+        }
+        $scope.currencyChanged=function(field){
 
         }
 

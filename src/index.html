@@ -30,20 +30,20 @@
 <main ng-if="$pageFinishedLoading" ng-class="{ 'menu-collapsed': $baSidebarService.isMenuCollapsed() }">
 
   <div ng-show="gotToken && notRegistering">
-  <ba-sidebar></ba-sidebar>
-  <page-top></page-top>
+    <ba-sidebar ng-hide="registerProgress"></ba-sidebar>
+    <page-top></page-top>
 
-  <div class="al-main">
-    <div class="al-content">
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="registerProgress">
-        <register-progress></register-progress>
+    <div class="al-main" ng-class="{'margin-left-zero': registerProgress == true}">
+      <div class="al-content">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="registerProgress">
+          <register-progress></register-progress>
+        </div>
+        <div ui-view autoscroll="true" autoscroll-body-top></div>
       </div>
-      <div ui-view autoscroll="true" autoscroll-body-top></div>
     </div>
-  </div>
 
-  <footer class="al-footer clearfix">
-  </footer>
+    <footer class="al-footer clearfix">
+    </footer>
   </div>
   <back-top></back-top>
 

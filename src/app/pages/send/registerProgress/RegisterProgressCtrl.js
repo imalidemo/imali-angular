@@ -15,10 +15,6 @@
         $rootScope.mobileVerified = false;
         $rootScope.addressVerified = "n";
         $rootScope.idDocumentsVerified = 'n';
-        $rootScope.residenceDocumentsVerified = 'n';
-        
-        $rootScope.selfieDocumentsVerified = 'n';
-        $rootScope.ethereumAddressVerified = true;
 
         $scope.goToGetVerified = function (path) {
             $location.path(path);
@@ -49,9 +45,6 @@
 
                         if($scope.user.kyc.status == "verified"){
                             $scope.allVerified = true;
-                            if($rootScope.ethereumAddressVerified){
-                                $rootScope.allVerified = true;
-                            }
                         }
                         $http.get(environmentConfig.API + '/user/address/', {
                             headers: {
@@ -60,11 +53,14 @@
                             }
                         }).then(function (res) {
                             if (res.status === 200) {
-                                $scope.user = res.data.data;
-                                if($scope.user.status =='verified') {
+                                $scope.address = res.data.data;
+                                if(!$scope.address.line_1 || !$scope.address.city || !$scope.address.country || !$scope.address.postal_code){
+                                    $scope.goToGetVerified("/identity/verification");
+                                }
+                                if($scope.address.status =='verified') {
                                     $rootScope.addressVerified = "v";
                                 }
-                                else if($scope.user.status =='pending') {
+                                else if($scope.address.status =='pending') {
                                     $rootScope.addressVerified = "p";
                                 }
                             }
@@ -87,8 +83,12 @@
             userVerification.verifyEmail(function(err,verified){
                 if(verified){
                     $rootScope.emailVerified = true;
+                    if($scope.user.mobile_number.length==0){
+                        $scope.goToGetVerified("/mobile/verify");
+                    }
                     vm.checkingMobileVerification($scope.user.mobile_number);
                 } else {
+                    $scope.goToGetVerified("/email/verify");
                     $rootScope.emailVerified = false;
                     $scope.loadingRegisterProgressView = false;
                 }
@@ -103,6 +103,7 @@
                     $scope.loadingRegisterProgressView = false;
                 } else {
                     $rootScope.mobileVerified = false;
+                    $scope.goToGetVerified("/mobile/confirm");
                     $scope.loadingRegisterProgressView = false;
                 }
             },number);
@@ -120,15 +121,10 @@
                         $scope.idDocuments = res.data.data.results.filter(function (element) {
                             return element.document_category == 'Proof Of Identity';
                         });
+                        if($scope.idDocuments.length==0){
+                            $scope.goToGetVerified("/document/verify/ID")
+                        }
                         $rootScope.idDocumentsVerified = vm.checkDocumentsArrayVerification($scope.idDocuments);
-                        $scope.residenceDocuments = res.data.data.results.filter(function (element) {
-                            return element.document_category == 'Proof Of Address';
-                        });
-                        $rootScope.residenceDocumentsVerified = vm.checkDocumentsArrayVerification($scope.residenceDocuments);
-                        $scope.selfieDocuments = res.data.data.results.filter(function (element) {
-                            return element.document_category == 'Advanced Proof Of Identity';
-                        });
-                        $rootScope.selfieDocumentsVerified = vm.checkDocumentsArrayVerification($scope.selfieDocuments);
                     }
                 }).catch(function (error) {
                     $scope.loadingRegisterProgressView = false;

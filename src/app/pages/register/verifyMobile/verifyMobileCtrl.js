@@ -5,7 +5,7 @@
         .controller('VerifyMobileCtrl', VerifyMobileCtrl);
 
     /** @ngInject */
-    function VerifyMobileCtrl($rootScope,$scope,$http,cookieManagement,environmentConfig,$location,errorToasts,userVerification,toastr) {
+    function VerifyMobileCtrl($rootScope,$scope,$http,$stateParams,cookieManagement,environmentConfig,$location,errorToasts,userVerification,toastr) {
 
         var vm = this;
         $scope.path = $location.path();
@@ -25,6 +25,7 @@
                     $location.path('/identity/verification');
                 } else {
                     $scope.loadingMobileVerifyView = false;
+                    $location.path('/mobile/confirm');
                 }
             },number);
         };
@@ -55,7 +56,12 @@
                 errorToasts.evaluateErrors(error.data);
             });
         };
-        vm.getUserInfo();
+        if(!$stateParams.from){
+            vm.getUserInfo();
+        }
+        else {
+            $scope.loadingMobileVerifyView = false;
+        }
 
         $scope.addMobile = function(){
             $rootScope.$pageFinishedLoading = false;

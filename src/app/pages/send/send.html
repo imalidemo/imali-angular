@@ -1,6 +1,17 @@
+<div class="ico-banner" ng-hide="allVerified">
+    <p>Our will review your information and let you know when you are fully verified.</p>
+</div>
+<register-progress></register-progress>
 <div class="panel col-md-6" ng-show='tab=="get_quote" && !loading'>
     <div class="panel-heading"><h2>Send money</h2></div>
     <div class="panel-body">
+        <div class="form-group">
+            <label><strong>Currencies</strong></label>
+            <select ng-change="currencyChanged('currency')" ng-model="administrator.language" class="form-control">
+                <option value="en">USD</option>
+                <option value="af">GBP</option>
+            </select>
+        </div>
         <form class="form-horizontal">
             <label class="control-label">Amount</label>
             <div class="input-group">
@@ -10,7 +21,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!from_amount"
+                    <button ng-disabled="!from_amount || !allVerified"
                             ng-click="getQuote(from_currency,to_currency,from_amount)"
                             class="btn btn-primary pull-right">Next
                     </button>

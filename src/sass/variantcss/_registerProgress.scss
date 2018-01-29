@@ -1,5 +1,7 @@
 .register-progress-box{
   margin-bottom: 40px;
+  padding-left: 100px;
+  padding-right: 100px;
 }
 
 .register-cirles{
@@ -81,4 +83,8 @@
   font-weight: bold;
   display: block;
   margin-top: 10px;
+}
+
+.margin-left-zero {
+  margin-left: 0px!important;
 }

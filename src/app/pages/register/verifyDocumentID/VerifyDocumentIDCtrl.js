@@ -144,7 +144,7 @@
         };
 
         $scope.goToNextView = function(){
-            $location.path('/document/verify/IDSelfie');
+            $location.path('/home');
         };
 
     }

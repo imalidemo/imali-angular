@@ -83,7 +83,7 @@
             userVerification.verifyEmail(function(err,verified){
                 if(verified){
                     $rootScope.emailVerified = true;
-                    if($scope.user.mobile_number.length==0){
+                    if($scope.user.mobile_number==null || $scope.user.mobile_number.length==0){
                         $scope.goToGetVerified("/mobile/verify");
                     }
                     vm.checkingMobileVerification($scope.user.mobile_number);
@@ -103,7 +103,7 @@
                     $scope.loadingRegisterProgressView = false;
                 } else {
                     $rootScope.mobileVerified = false;
-                    $scope.goToGetVerified("/mobile/confirm");
+                    $scope.goToGetVerified("/mobile/verify");
                     $scope.loadingRegisterProgressView = false;
                 }
             },number);

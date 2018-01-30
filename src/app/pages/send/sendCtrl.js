@@ -5,8 +5,8 @@
         .controller('SendCtrl', SendCtrl);
 
     /** @ngInject */
-    function SendCtrl($rootScope,$scope,$location,$uibModal,toastr,cookieManagement,environmentConfig,$http,errorToasts,errorHandler,$window) {
-      
+    function SendCtrl($rootScope,$state, $scope, $location, $uibModal, toastr, cookieManagement, environmentConfig, $http, errorToasts, errorHandler, $window) {
+
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
 
@@ -15,7 +15,7 @@
             pageNo: 1,
             maxSize: 5
         };
-        
+
         $scope.currencies = [
             {
                 "code": "USD",
@@ -34,18 +34,20 @@
                 "enabled": true
             },
             {
-                "code":"GBP",
-                "description":"British Pound Sterling",
-                "symbol":"£",
-                "unit":"sterling",
-                "divisibility":2,
-                "enabled":true
+                "code": "GBP",
+                "description": "British Pound Sterling",
+                "symbol": "£",
+                "unit": "sterling",
+                "divisibility": 2,
+                "enabled": true
             }
-        ];      
+        ];
 
-        $scope.getCurrency = function(code) {
-          var result = $.grep($scope.currencies, function(e){ return e.code == code; });
-          return result.length == 0 ? {} : result[0];
+        $scope.getCurrency = function (code) {
+            var result = $.grep($scope.currencies, function (e) {
+                return e.code == code;
+            });
+            return result.length == 0 ? {} : result[0];
         }
 
         $scope.transactions = [];
@@ -59,19 +61,19 @@
         $scope.transactionsStateMessage = '';
         $scope.transactionsData = {};
         $scope.loadingTransactions = false;
-        $scope.typeOptions = ['Type','Credit','Debit']; //Transfer
-        $scope.statusOptions = ['Status','Initiating','Processing','Pending','Complete','Failed'];
+        $scope.typeOptions = ['Type', 'Credit', 'Debit']; //Transfer
+        $scope.statusOptions = ['Status', 'Initiating', 'Processing', 'Pending', 'Complete', 'Failed'];
         $scope.currencyOptions = [];
-        $scope.orderByOptions = ['Largest','Latest','Smallest'];
+        $scope.orderByOptions = ['Largest', 'Latest', 'Smallest'];
 
-        vm.getTransactionUrl = function(){
+        vm.getTransactionUrl = function () {
             vm.filterParams = '?page=' + $scope.pagination.pageNo + '&page_size=' + $scope.pagination.itemsPerPage
                 + '&orderby=-created';
 
             return environmentConfig.API + '/transactions/' + vm.filterParams;
         };
 
-        $scope.openModal = function (page, size,transaction) {
+        $scope.openModal = function (page, size, transaction) {
             vm.theModal = $uibModal.open({
                 animation: true,
                 templateUrl: page,
@@ -84,8 +86,8 @@
                 }
             });
 
-            vm.theModal.result.then(function(transaction){
-                if(transaction){
+            vm.theModal.result.then(function (transaction) {
+                if (transaction) {
                     $scope.searchParams = {
                         searchId: '',
                         searchUser: $state.params.code || '',
@@ -99,11 +101,12 @@
                     };
                     $scope.getLatestTransactions();
                 }
-            }, function(){
+            }, function () {
             });
         };
 
-        $http({url:environmentConfig.EXCHANGE_API + '/user/rates/',
+        $http({
+            url: environmentConfig.EXCHANGE_API + '/user/rates/',
             method: "GET",
             params: {
                 from_currency: "NGN",
@@ -115,52 +118,38 @@
             }
         }).then(function (res) {
             $scope.loadingQuote = false;
-            $scope.to_amount = res.data.data.to_amount/100;
-            $scope.changeTab("show_quote");
+            $scope.response = res.data.data.results;
+            for (var i = 0; i < $scope.response.length; i++) {
+                if ($scope.response[i].from_currency.code === "GBP") {
+                    $scope.GBP_currency = $scope.response[i];
+                } else if ($scope.response[i].from_currency.code === "USD") {
+                    $scope.USD_currency = $scope.response[i];
+                }
+            }
         }).catch(function (error) {
             $scope.loadingQuote = false;
-            if(error.status == 403){
+            if (error.status == 403) {
                 errorHandler.handle403();
                 return;
             }
             errorToasts.evaluateErrors(error.data);
         });
 
-        $scope.saveQuote = function(from_currency,to_currency,from_amount) {
-          if(vm.token) {
-              var currency = $scope.getCurrency(from_currency);
-              from_amount = from_amount * Math.pow(10, currency.divisibility);
-              $scope.savingQuote = true;
-              $http({url:environmentConfig.EXCHANGE_API + '/user/quotes/', 
-                method: "POST",
-                data: {
-                    from_amount: from_amount,
-                    from_currency: to_currency,
-                    to_currency: from_currency
-                }, 
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': vm.token
-                }
-              }).then(function (res) {
-                  $location.path('/quote');
-              }).catch(function (error) {
-                  $scope.savingQuote = false;
-                  if(error.status == 403){
-                      errorHandler.handle403();
-                      return;
-                  }
-                  errorToasts.evaluateErrors(error.data);
-              });
+        $scope.saveQuote = function (from_currency,from_amount) {
+            /*$location.path('/quote')*/
+            $state.go("quote",{to_currency:$scope.to_currency,from_amount:from_amount,from_currency:from_currency})
+        }
+        $scope.getQuote = function (from_currency, from_amount) {
+            if (from_currency === "USD") {
+                $scope.to_currency = $scope.USD_currency
+            } else if (from_currency === "GBP") {
+                $scope.to_currency = $scope.GBP_currency
             }
-
-        }
-        $scope.currencyChanged=function(field){
-
+            $scope.changeTab('show_quote');
         }
 
-        $scope.changeTab = function(tabName) {
-          $scope.tab = tabName;
+        $scope.changeTab = function (tabName) {
+            $scope.tab = tabName;
         }
 
 

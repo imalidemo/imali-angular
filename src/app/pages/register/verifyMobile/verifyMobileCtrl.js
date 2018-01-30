@@ -41,7 +41,7 @@
                 if (res.status === 200) {
                     $scope.user = res.data.data;
                     $scope.showAuthNav = true;
-                    if(res.data.data.mobile_number){
+                    if(res.data.data.mobile_number && res.data.data.mobile_number.length>5){
                         vm.checkIfMobileVerified(res.data.data.mobile_number);
                     } else{
                         $scope.loadingMobileVerifyView = false;

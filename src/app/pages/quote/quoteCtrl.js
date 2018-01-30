@@ -5,14 +5,14 @@
         .controller('QuoteCtrl', QuoteCtrl);
 
     /** @ngInject */
-    function QuoteCtrl($scope, environmentConfig, $uibModal, toastr, $http, $location, cookieManagement, errorToasts, $window, errorHandler) {
+    function QuoteCtrl($scope, $stateParams,environmentConfig, $uibModal, toastr, $http, $location, cookieManagement, errorToasts, $window, errorHandler) {
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
         $scope.selected_account = -1;
         $scope.tab = "bank";
         $scope.loading = true;
-        $scope.loadingQuotes = true;
+        $scope.loadingQuotes = false;
         $scope.newBankData = {};
         $scope.companyBankData = {};
         $scope.active_quote = {};
@@ -21,6 +21,9 @@
             bank_name: "Coparts",
             number: ""
         }];
+        $scope.to_currency=$stateParams.to_currency
+        $scope.from_amount=$stateParams.from_amount
+        $scope.from_currency=$stateParams.from_currency
 
         vm.currencies = [
             {
@@ -86,7 +89,7 @@
             });
 
         }
-        vm.getActiveQuotes();
+        /*vm.getActiveQuotes();*/
 
         vm.getBankAccounts = function () {
             if (vm.token) {

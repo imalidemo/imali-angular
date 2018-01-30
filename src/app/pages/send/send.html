@@ -7,9 +7,9 @@
     <div class="panel-body">
         <div class="form-group">
             <label><strong>Currencies</strong></label>
-            <select ng-change="currencyChanged('currency')" ng-model="administrator.language" class="form-control">
-                <option value="en">USD</option>
-                <option value="af">GBP</option>
+            <select ng-model="from_currency" class="form-control">
+                <option value="USD">USD</option>
+                <option value="GBP">GBP</option>
             </select>
         </div>
         <form class="form-horizontal">
@@ -21,8 +21,8 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!from_amount || !allVerified"
-                            ng-click="getQuote(from_currency,to_currency,from_amount)"
+                    <button ng-disabled="!from_amount || !allVerified || !from_currency"
+                            ng-click="getQuote(from_currency,from_amount)"
                             class="btn btn-primary pull-right">Next
                     </button>
                     <loading-image ng-show="loadingQuote"></loading-image>
@@ -38,16 +38,16 @@
 
         <p><strong>You send</strong></p>
         <p ng-hide="loadingQuote">
-            {{getCurrency(from_currency).symbol}} {{from_amount}}
+            {{to_currency.to_currency.symbol+from_amount}}
         </p>
         <p><strong>They receive</strong></p>
         <p ng-hide="loadingQuote">
-            {{getCurrency(to_currency).symbol}} {{to_amount}}
+            {{to_currency.from_currency.symbol}}{{from_amount/(to_currency.rate/100)}}
         </p>
     </div>
     <div class="panel-btn">
         <loading-image ng-show="savingQuote"></loading-image>
-        <button ng-disabled="savingQuote" ng-click="saveQuote(to_currency,from_currency,from_amount)"
+        <button ng-disabled="savingQuote" ng-click="saveQuote(from_currency,from_amount)"
                 class="btn btn-primary pull-right">Accept
         </button>
         <button ng-disabled="savingQuote" ng-click='changeTab("get_quote")' class="btn btn-default pull-left">Back

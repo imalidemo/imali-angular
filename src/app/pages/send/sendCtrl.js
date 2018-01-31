@@ -5,10 +5,11 @@
         .controller('SendCtrl', SendCtrl);
 
     /** @ngInject */
-    function SendCtrl($rootScope,$state, $scope, $location, $uibModal, toastr, cookieManagement, environmentConfig, $http, errorToasts, errorHandler, $window) {
+    function SendCtrl($rootScope, $state, $scope, $location, $uibModal, toastr, cookieManagement, environmentConfig, $http, errorToasts, errorHandler, $window) {
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
+        console.log(vm.token);
 
         $scope.pagination = {
             itemsPerPage: 26,
@@ -135,9 +136,39 @@
             errorToasts.evaluateErrors(error.data);
         });
 
-        $scope.saveQuote = function (from_currency,from_amount) {
-            /*$location.path('/quote')*/
-            $state.go("quote",{to_currency:$scope.to_currency,from_amount:from_amount,from_currency:from_currency})
+        $scope.saveQuote = function (from_currency, to_currency, from_amount) {
+            $state.go("quote", {
+                to_currency: $scope.to_currency,
+                from_amount: from_amount,
+                from_currency: from_currency
+            })
+            /*if(vm.token) {
+             var currency = $scope.getCurrency(from_currency);
+             from_amount = from_amount * Math.pow(10, currency.divisibility);
+             $scope.savingQuote = true;
+             $http({url:environmentConfig.EXCHANGE_API + '/user/quotes/',
+             method: "POST",
+             data: {
+             from_amount: from_amount,
+             from_currency: to_currency,
+             to_currency: from_currency
+             },
+             headers: {
+             'Content-Type': 'application/json',
+             'Authorization': vm.token
+             }
+             }).then(function (res) {
+             $location.path('/quote');
+             }).catch(function (error) {
+             $scope.savingQuote = false;
+             if(error.status == 403){
+             errorHandler.handle403();
+             return;
+             }
+             errorToasts.evaluateErrors(error.data);
+             });
+             }*/
+
         }
         $scope.getQuote = function (from_currency, from_amount) {
             if (from_currency === "USD") {

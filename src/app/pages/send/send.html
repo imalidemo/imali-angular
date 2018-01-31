@@ -47,7 +47,7 @@
     </div>
     <div class="panel-btn">
         <loading-image ng-show="savingQuote"></loading-image>
-        <button ng-disabled="savingQuote" ng-click="saveQuote(from_currency,from_amount)"
+        <button ng-disabled="savingQuote" ng-click="saveQuote(from_currency,to_currency.to_currency.code,from_amount)"
                 class="btn btn-primary pull-right">Accept
         </button>
         <button ng-disabled="savingQuote" ng-click='changeTab("get_quote")' class="btn btn-default pull-left">Back

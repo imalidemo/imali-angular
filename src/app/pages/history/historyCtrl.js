@@ -4,7 +4,7 @@
     angular.module('BlurAdmin.pages.history')
         .controller('HistoryCtrl', HistoryCtrl);
     /** @ngInject */
-    function HistoryCtrl($scope,environmentConfig,$uibModal,toastr,$http,$location,cookieManagement,errorToasts,$window,errorHandler) {
+    function HistoryCtrl($scope,environmentConfig,$state,$uibModal,toastr,$http,$location,cookieManagement,errorToasts,$window,errorHandler) {
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
 
@@ -28,13 +28,13 @@
             "divisibility": 2,
             "enabled": true
           },
-        ];      
+        ];
 
         vm.getCurrency = function(code) {
           var result = $.grep(vm.currencies, function(e){ return e.code == code; });
           return result.length == 0 ? {} : result[0];
         }
-    
+
         vm.getQuotes = function() {
           $scope.loadingQuotes = true;
           $http.get(environmentConfig.EXCHANGE_API + '/user/quotes/', {
@@ -44,11 +44,9 @@
                 }
             }).then(function (res) {
                 $scope.loadingQuotes = false;
-                var quotes = res.data.data;
+                var quotes = res.data.data.results;
                 for(var i=0;i<quotes.length;i++) {
                   var quote = quotes[i];
-                  quote.from_currency = vm.getCurrency(quote.from_currency);
-                  quote.to_currency = vm.getCurrency(quote.to_currency);
                   quote.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
                   quote.to_amount = quote.to_amount / Math.pow(10, quote.to_currency.divisibility);
                 }
@@ -62,8 +60,13 @@
                 errorToasts.evaluateErrors(error.data);
             });
 
-        }  
+        }
         vm.getQuotes();
+        $scope.gotoConversion=function(quote){
+            if(quote.conversion==null){
+                $state.go('quote',{quote_id:quote.id})
+            }
+        }
     }
 
 })();

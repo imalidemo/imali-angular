@@ -7,8 +7,11 @@
 
         </p>
         <p><strong>They receive</strong></p>
-        <p>
+        <p ng-hide="from_quote">
             {{to_currency.from_currency.symbol}}{{from_amount/(to_currency.rate/100)}}
+        </p>
+        <p ng-show="from_quote">
+            {{to_currency.from_currency.symbol}}{{to_currency.to_amount/100}}
         </p>
     </div>
     <loading-image ng-show="loading"></loading-image>

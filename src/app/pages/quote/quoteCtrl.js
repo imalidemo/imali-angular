@@ -5,7 +5,7 @@
         .controller('QuoteCtrl', QuoteCtrl);
 
     /** @ngInject */
-    function QuoteCtrl($scope, $stateParams,environmentConfig, $uibModal, toastr, $http, $location, cookieManagement, errorToasts, $window, errorHandler) {
+    function QuoteCtrl($scope, $stateParams, environmentConfig, $uibModal, toastr, $http, $location, cookieManagement, errorToasts, $window, errorHandler) {
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
@@ -21,9 +21,7 @@
             bank_name: "Coparts",
             number: ""
         }];
-        $scope.to_currency=$stateParams.to_currency
-        $scope.from_amount=$stateParams.from_amount
-        $scope.from_currency=$stateParams.from_currency
+        $scope.from_quote=false
 
         vm.currencies = [
             {
@@ -57,10 +55,10 @@
         }
 
         vm.setActiveQuote = function (quote) {
-            quote.from_currency = vm.getCurrency(quote.from_currency);
-            quote.to_currency = vm.getCurrency(quote.to_currency);
-            quote.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
-            quote.to_amount = quote.to_amount / Math.pow(10, quote.to_currency.divisibility);
+            console.log(quote);
+            $scope.to_currency = quote
+            $scope.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
+            $scope.from_currency = quote.from_currency.code
             $scope.active_quote = quote;
             if (quote.bank) {
                 vm.showPaymentTab();
@@ -68,7 +66,7 @@
         }
 
         vm.getActiveQuotes = function () {
-            $http.get(environmentConfig.EXCHANGE_API + '/user/quotes/?status=active', {
+            $http.get(environmentConfig.EXCHANGE_API + '/user/quotes/'+$stateParams.quote_id, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': vm.token
@@ -78,7 +76,7 @@
                 if (res.data.data.length == 0)
                     $location.path('/transactions');
                 else
-                    vm.setActiveQuote(res.data.data[0]);
+                    vm.setActiveQuote(res.data.data);
             }).catch(function (error) {
                 $scope.loadingQuotes = false;
                 if (error.status == 403) {
@@ -89,7 +87,15 @@
             });
 
         }
-        /*vm.getActiveQuotes();*/
+        if ($stateParams.quote_id) {
+            $scope.from_quote=true
+            vm.getActiveQuotes()
+        }else{
+            $scope.from_quote=false
+            $scope.to_currency = $stateParams.to_currency
+            $scope.from_amount = $stateParams.from_amount
+            $scope.from_currency = $stateParams.from_currency
+        }
 
         vm.getBankAccounts = function () {
             if (vm.token) {
@@ -104,8 +110,15 @@
                     if (res.status === 200) {
                         $scope.bankAccounts = res.data.data;
                         var item = [{id: -1, bank_name: "Add a new recipient", number: ""},
-                                    {id: -2, name: "Copart", bank_name: "Wells Fargo Bank", number: "4114145394", aba: " 121000248", swift: "WFBIUS6S"},
-                                    ]
+                            {
+                                id: -2,
+                                name: "Copart",
+                                bank_name: "Wells Fargo Bank",
+                                number: "4114145394",
+                                aba: " 121000248",
+                                swift: "WFBIUS6S"
+                            },
+                        ]
                         $scope.bankAccounts.splice(0, 0, item[0], item[1]);
                     }
                 }).catch(function (error) {
@@ -126,13 +139,13 @@
                 $scope.loading = false;
                 $scope.modifyQuote({bank: res.data.data.id, email: $scope.newBankData.email});
                 /* 
-                if (res.status === 201) {
-                    vm.getBankAccounts();
-                    toastr.success('You have successfully added the bank account!');
-                    $scope.newBankData = {};
-                    $window.scrollTo(0, 0);
-                }
-                */
+                 if (res.status === 201) {
+                 vm.getBankAccounts();
+                 toastr.success('You have successfully added the bank account!');
+                 $scope.newBankData = {};
+                 $window.scrollTo(0, 0);
+                 }
+                 */
             }).catch(function (error) {
                 $scope.loading = false;
                 if (error.status == 403) {

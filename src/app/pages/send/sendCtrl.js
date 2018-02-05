@@ -9,7 +9,6 @@
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
-        console.log(vm.token);
 
         $scope.pagination = {
             itemsPerPage: 26,
@@ -123,7 +122,6 @@
                 'Authorization': vm.token
             }
         }).then(function (res) {
-            console.log(res.data.data.results);
             $scope.loadingQuote = false;
             $scope.response = res.data.data.results;
             for (var i = 0; i < $scope.response.length; i++) {
@@ -145,14 +143,14 @@
         $scope.saveQuote = function (to_currency, from_amount) {
 
             if (vm.token) {
-                var currency = $scope.getCurrency(to_currency);
-                from_amount = from_amount * Math.pow(10, currency.divisibility);
+                /*var currency = $scope.getCurrency(to_currency);*/
+                let amount = from_amount * Math.pow(10, to_currency.from_currency.divisibility);
                 $scope.savingQuote = true;
                 $http({
                     url: environmentConfig.EXCHANGE_API + '/user/quotes/',
                     method: "POST",
                     data: {
-                        from_amount: from_amount,
+                        from_amount: amount,
                         from_currency: to_currency.from_currency.code,
                         to_currency: to_currency.to_currency.code
                     },
@@ -161,7 +159,12 @@
                         'Authorization': vm.token
                     }
                 }).then(function (res) {
-                    $location.path('/quote');
+                    var quote=res.data.data;
+                    console.log(quote)
+                    $state.go('quote',{
+                        from_amount:from_amount,
+                        to_currency:quote
+                    });
                 }).catch(function (error) {
                     $scope.savingQuote = false;
                     if (error.status == 403) {

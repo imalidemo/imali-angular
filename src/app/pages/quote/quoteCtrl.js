@@ -21,7 +21,7 @@
             bank_name: "Coparts",
             number: ""
         }];
-        $scope.from_quote=false
+        $scope.from_quote = false
 
         vm.currencies = [
             {
@@ -49,24 +49,23 @@
             return result.length == 0 ? {} : result[0];
         }
 
-        vm.showPaymentTab = function () {
+        vm.showPaymentTab = function (quote) {
             $scope.tab = "payment";
-            vm.getCompanyBankAccount();
+            vm.getCompanyBankAccount(quote);
         }
 
         vm.setActiveQuote = function (quote) {
-            console.log(quote);
             $scope.to_currency = quote
             $scope.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
             $scope.from_currency = quote.from_currency.code
             $scope.active_quote = quote;
             if (quote.bank) {
-                vm.showPaymentTab();
+                vm.showPaymentTab(quote);
             }
         }
 
         vm.getActiveQuotes = function () {
-            $http.get(environmentConfig.EXCHANGE_API + '/user/quotes/'+$stateParams.quote_id, {
+            $http.get(environmentConfig.EXCHANGE_API + '/user/quotes/' + $stateParams.quote_id, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': vm.token
@@ -88,13 +87,13 @@
 
         }
         if ($stateParams.quote_id) {
-            $scope.from_quote=true
+            $scope.from_quote = true
             vm.getActiveQuotes()
-        }else{
-            $scope.from_quote=false
+        } else {
+            $scope.from_quote = false
             $scope.to_currency = $stateParams.to_currency
             $scope.from_amount = $stateParams.from_amount
-            $scope.from_currency = $stateParams.from_currency
+            $scope.active_quote = $stateParams.to_currency
         }
 
         vm.getBankAccounts = function () {
@@ -159,7 +158,7 @@
         $scope.modifyQuote = function (data) {
             var quote_id = $scope.active_quote.id;
             $scope.loading = true;
-            $http.put(environmentConfig.EXCHANGE_API + '/user/quotes/' + quote_id + "/", data, {
+            $http.patch(environmentConfig.EXCHANGE_API + '/user/quotes/' + quote_id + "/", data, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': vm.token
@@ -171,7 +170,7 @@
                         return;
                     }
                     vm.setActiveQuote(res.data.data);
-                    vm.showPaymentTab();
+                    vm.showPaymentTab(res.data.data);
                 }
             }).catch(function (error) {
                 $scope.loading = false;
@@ -183,27 +182,14 @@
             });
         };
 
-        vm.getCompanyBankAccount = function () {
-            // $scope.loading = true;
-            $http.get(environmentConfig.API + '/company/bank-account/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': vm.token
-                }
-            }).then(function (res) {
-                if (res.data.data.length > 0)
-                    $scope.companyBankData = res.data.data[0].bank_account;
-                else
-                    toastr.error("Please contact the admin to get bank details.");
-                $scope.loading = false;
-            }).catch(function (error) {
-                $scope.loading = false;
-                if (error.status == 403) {
-                    errorHandler.handle403();
-                    return;
-                }
-                errorToasts.evaluateErrors(error.data);
-            });
+        vm.getCompanyBankAccount = function (quote) {
+            console.log(quote)
+            if (quote) {
+                $scope.companyBankData = quote.metadata
+            }
+            else
+                toastr.error("Please contact the admin to get bank details.");
+            $scope.loading = false;
         };
 
         vm.findIndexOfBankAccount = function (element) {

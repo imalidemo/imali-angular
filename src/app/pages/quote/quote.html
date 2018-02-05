@@ -8,7 +8,7 @@
         </p>
         <p><strong>They receive</strong></p>
         <p ng-hide="from_quote">
-            {{to_currency.from_currency.symbol}}{{from_amount/(to_currency.rate/100)}}
+            {{to_currency.from_currency.symbol}}{{to_currency.to_amount/100}}
         </p>
         <p ng-show="from_quote">
             {{to_currency.from_currency.symbol}}{{to_currency.to_amount/100}}
@@ -148,14 +148,6 @@
                     <label><strong>Branch code</strong></label>
                     <input type="text" ng-model="newBankData.branch_code" class="form-control" placeholder="E.g 456798">
                 </div>
-                <!--<div class="form-group">-->
-                <!--<label><strong>Bank/Branch Address</strong></label>-->
-                <!--<input type="text" ng-model="s" class="form-control divider"  placeholder="Address line 1">-->
-                <!--<input type="text" ng-model="d" class="form-control divider"  placeholder="Address line 2">-->
-                <!--<input type="text" ng-model="f" class="form-control divider"  placeholder="City">-->
-                <!--<country-select class="form-control pointer divider" data-ng-model="q"></country-select>-->
-                <!--<input type="text" ng-model="r" class="form-control divider"  placeholder="Code/Zipcode">-->
-                <!--</div>-->
                 <div class="form-group">
                     <label><strong>Swift</strong></label>
                     <input type="text" ng-model="newBankData.swift" class="form-control" placeholder="E.g FDDODUMM">
@@ -183,7 +175,7 @@
         </button>
     </div>
     <div class="panel-btn" ng-hide="selected_account == -1">
-        <button ng-click="modifyQuote({bank: selected_account})" class="btn btn-primary pull-right">Next
+        <button ng-click="modifyQuote({metadata: getSelectedAccount()})" class="btn btn-primary pull-right">Next
         </button>
     </div>
 </div>

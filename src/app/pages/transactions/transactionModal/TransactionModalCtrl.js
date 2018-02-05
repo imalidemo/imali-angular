@@ -6,12 +6,12 @@
 
     function TransactionModalCtrl($uibModalInstance,$http,$scope,errorToasts,toastr,transaction,metadataTextService,$location,environmentConfig,cookieManagement,$ngConfirm) {
         $scope.metadata = metadataTextService.convertToText(transaction.metadata);
+
         $scope.transaction = transaction;
         $scope.updatingTransaction = false;
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
-
         $scope.updateTransactionConfirm = function (status) {
                 $ngConfirm({
               title: 'Update transaction',

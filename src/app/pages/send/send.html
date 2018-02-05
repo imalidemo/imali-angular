@@ -6,8 +6,8 @@
     <div class="panel-heading"><h2>Send money</h2></div>
     <div class="panel-body">
         <div class="form-group">
-            <label><strong>Currencies</strong></label>
-            <select ng-model="from_currency" class="form-control">
+            <label><strong>Select to currency</strong></label>
+            <select ng-model="to_currency" class="form-control">
                 <option value="USD">USD</option>
                 <option value="GBP">GBP</option>
             </select>
@@ -21,8 +21,8 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!from_amount || !allVerified || !from_currency"
-                            ng-click="getQuote(from_currency,from_amount)"
+                    <button ng-disabled="!from_amount || !allVerified || !to_currency"
+                            ng-click="getQuote(to_currency,from_amount)"
                             class="btn btn-primary pull-right">Next
                     </button>
                     <loading-image ng-show="loadingQuote"></loading-image>
@@ -38,16 +38,16 @@
 
         <p><strong>You send</strong></p>
         <p ng-hide="loadingQuote">
-            {{to_currency.to_currency.symbol+from_amount}}
+            {{to_currency.from_currency.symbol+from_amount}}
         </p>
         <p><strong>They receive</strong></p>
         <p ng-hide="loadingQuote">
-            {{to_currency.from_currency.symbol}}{{from_amount/(to_currency.rate/100)}}
+            {{to_currency.to_currency.symbol}}{{from_amount*(to_currency.rate/100)}}
         </p>
     </div>
     <div class="panel-btn">
         <loading-image ng-show="savingQuote"></loading-image>
-        <button ng-disabled="savingQuote" ng-click="saveQuote(from_currency,to_currency.to_currency.code,from_amount)"
+        <button ng-disabled="savingQuote" ng-click="saveQuote(to_currency,from_amount)"
                 class="btn btn-primary pull-right">Accept
         </button>
         <button ng-disabled="savingQuote" ng-click='changeTab("get_quote")' class="btn btn-default pull-left">Back

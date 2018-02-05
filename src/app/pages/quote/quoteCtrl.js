@@ -59,7 +59,7 @@
             $scope.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
             $scope.from_currency = quote.from_currency.code
             $scope.active_quote = quote;
-            if (quote.bank) {
+            if (quote) {
                 vm.showPaymentTab(quote);
             }
         }
@@ -74,8 +74,9 @@
                 $scope.loadingQuotes = false;
                 if (res.data.data.length == 0)
                     $location.path('/transactions');
-                else
+                else{
                     vm.setActiveQuote(res.data.data);
+                }
             }).catch(function (error) {
                 $scope.loadingQuotes = false;
                 if (error.status == 403) {
@@ -156,9 +157,10 @@
         };
 
         $scope.modifyQuote = function (data) {
+            var metadata=JSON.stringify(data)
             var quote_id = $scope.active_quote.id;
             $scope.loading = true;
-            $http.patch(environmentConfig.EXCHANGE_API + '/user/quotes/' + quote_id + "/", data, {
+            $http.patch(environmentConfig.EXCHANGE_API + '/user/quotes/' + quote_id + "/", {metadata:metadata}, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': vm.token
@@ -171,6 +173,7 @@
                     }
                     vm.setActiveQuote(res.data.data);
                     vm.showPaymentTab(res.data.data);
+                    vm.createTransaction(res.data.data,quote_id,data);
                 }
             }).catch(function (error) {
                 $scope.loading = false;
@@ -182,10 +185,30 @@
             });
         };
 
+        vm.createTransaction=function (quote_response,quote_id,metadata) {
+            var data={
+                quote_id:quote_id,
+                quote:quote_response,
+                recipient:metadata.email,
+                bank_details:metadata.bank,
+                extra_field:''
+            }
+            $http.post(environmentConfig.API + '/transactions/credit/', data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': vm.token
+                }
+            }).then(function (res) {
+                if(res.status==='success'){
+                    console.log("Transaction successfull");
+                }
+            });
+        }
+
         vm.getCompanyBankAccount = function (quote) {
-            console.log(quote)
             if (quote) {
-                $scope.companyBankData = quote.metadata
+                var metadata=JSON.parse(quote.metadata)
+                $scope.companyBankData = metadata.bank
             }
             else
                 toastr.error("Please contact the admin to get bank details.");

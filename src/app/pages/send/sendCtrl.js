@@ -144,7 +144,7 @@
 
             if (vm.token) {
                 /*var currency = $scope.getCurrency(to_currency);*/
-                let amount = from_amount * Math.pow(10, to_currency.from_currency.divisibility);
+                var amount = from_amount * Math.pow(10, to_currency.from_currency.divisibility);
                 $scope.savingQuote = true;
                 $http({
                     url: environmentConfig.EXCHANGE_API + '/user/quotes/',
@@ -160,7 +160,7 @@
                     }
                 }).then(function (res) {
                     var quote=res.data.data;
-                    console.log(quote)
+                    console.log(quote);
                     $state.go('quote',{
                         from_amount:from_amount,
                         to_currency:quote

@@ -110,15 +110,15 @@
             </div>
         </div>
     </div>
+    <div class="form-group">
+        <label><strong>Recipient email <span class="required-icon">*</span></strong></label>
+        <input type="email" ng-model="newBankData.email" class="form-control"
+               placeholder="E.g hello@example.com" required>
+    </div>
     <div class="panel-body" ng-show="selected_account == -1">
         <p><strong>Add a new recipient</strong></p>
         <form name="bankAccountForm">
             <div>
-                <div class="form-group">
-                    <label><strong>Recipient email <span class="required-icon">*</span></strong></label>
-                    <input type="email" ng-model="newBankData.email" class="form-control"
-                           placeholder="E.g hello@example.com" required>
-                </div>
                 <div class="form-group">
                     <label><strong>Account name/holder</strong> <span class="required-icon">*</span></label>
                     <input type="text" ng-model="newBankData.name" class="form-control" placeholder="E.g Currency Corp"
@@ -175,7 +175,7 @@
         </button>
     </div>
     <div class="panel-btn" ng-hide="selected_account == -1">
-        <button ng-click="modifyQuote({metadata: getSelectedAccount()})" class="btn btn-primary pull-right">Next
+        <button ng-click="modifyQuote({bank:getSelectedAccount(),email:newBankData.email})" class="btn btn-primary pull-right">Next
         </button>
     </div>
 </div>

@@ -55,6 +55,7 @@
         }
 
         vm.setActiveQuote = function (quote) {
+            console.log(quote)
             $scope.to_currency = quote
             $scope.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
             $scope.from_currency = quote.from_currency.code
@@ -207,7 +208,7 @@
                 }
             }).then(function (res) {
                 if(res.status==='success'){
-                    console.log("Transaction successfull");
+                    toastr.success('Transaction successfull')
                 }
             });
         }

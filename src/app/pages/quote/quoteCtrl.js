@@ -55,7 +55,6 @@
         }
 
         vm.setActiveQuote = function (quote) {
-            console.log(quote)
             $scope.to_currency = quote
             $scope.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
             $scope.from_currency = quote.from_currency.code
@@ -137,7 +136,6 @@
                 }
             }).then(function (res) {
                 $scope.loading = false;
-                console.log(res.data.data)
                 $scope.modifyQuote({bank: res.data.data, email: $scope.newBankData.email});
                 /* 
                  if (res.status === 201) {
@@ -172,7 +170,6 @@
                         $location.path('/home');
                         return;
                     }
-                    console.log(res.data.data)
                     vm.setActiveQuote(res.data.data);
                     vm.showPaymentTab(res.data.data);
                     vm.createTransaction(res.data.data,quote_id,data);

@@ -160,7 +160,6 @@
                     }
                 }).then(function (res) {
                     var quote=res.data.data;
-                    console.log(quote);
                     $state.go('quote',{
                         to_currency:quote
                     });

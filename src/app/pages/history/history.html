@@ -1,26 +1,33 @@
-<div  class="panel col-md-12" ng-hide='loadingQuotes'>
-  <div class="panel-heading"><h2>Quote history</h2></div>
-  <table class="table table-condensed table-striped table-hover " ng-hide="quotes.length == 0">
-      <tr class="black-muted-bg">
-        <th><strong>ID</strong></th>
-        <th><strong>Sent Amount</strong></th>
-        <th><strong>Recipient</strong></th>
-        <th><strong>Recieved Amount</strong></th>
-        <th><strong>Conversion Rate</strong></th>
-      </tr>
-      <tr class="pointer" ng-click="gotoConversion(quote)" ng-repeat="quote in quotes">
-        <td>{{quote.id}}</td>
-        <td>{{quote.from_currency.symbol}} {{quote.from_amount}}</td>
-        <td>{{quote.recipient}}</td>
-        <td>{{quote.to_currency.symbol}} {{quote.to_amount}}</td>
-        <td>{{(quote.rate/100).toString()}}</td>
-      </tr>
-  </table>
-  <div ng-show="quotes.length == 0"><i>No quote history</i></div>
+<div class="panel col-md-12" ng-hide='loadingQuotes'>
+    <div class="panel-heading"><h2>Quote history</h2></div>
+    <table class="table table-condensed table-striped table-hover " ng-hide="quotes.length == 0">
+        <tr class="black-muted-bg">
+            <th><strong>ID</strong></th>
+            <th><strong>Sent Amount</strong></th>
+            <th><strong>Recipient</strong></th>
+            <th><strong>Recieved Amount</strong></th>
+            <th><strong>Conversion Rate</strong></th>
+        </tr>
+        <tr class="pointer" ng-click="gotoConversion(quote)" ng-repeat="quote in quotes">
+            <td>{{quote.id}}</td>
+            <td>{{quote.from_currency.symbol}} {{quote.from_amount}}</td>
+            <td>{{quote.metadata.email}}</td>
+            <td>{{quote.to_currency.symbol}} {{quote.to_amount}}</td>
+            <td>{{(quote.rate/100).toString()}}</td>
+        </tr>
+    </table>
+    <div>
+        <p uib-pagination boundary-links="true" items-per-page="pagination.itemsPerPage"
+           total-items="quotesData.count" ng-model="pagination.pageNo"
+           max-size="pagination.maxSize" class="pagination-sm pull-right transaction-history-pagination"
+           force-ellipses="true" ng-change="getQuotes()"
+           previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></p>
+    </div>
+    <div ng-show="quotes.length == 0"><i>No quote history</i></div>
 </div>
 
 
 <!-- LOADING PANEL SCREEN -->
 <div ba-panel ng-show='loadingQuotes'>
-  <loading-image></loading-image>
+    <loading-image></loading-image>
 </div>

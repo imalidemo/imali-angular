@@ -5,7 +5,7 @@
         .controller('TransactionsCtrl', TransactionsCtrl);
 
     /** @ngInject */
-    function TransactionsCtrl($location,$scope,environmentConfig,$http,cookieManagement,$uibModal,errorToasts,$state,$window,errorHandler) {
+    function TransactionsCtrl($location, $scope, environmentConfig, $http, cookieManagement, $uibModal, errorToasts, $state, $window, errorHandler) {
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
@@ -20,20 +20,20 @@
         $scope.transactionsStateMessage = '';
         $scope.transactionsData = {};
         $scope.loadingTransactions = false;
-        $scope.typeOptions = ['Type','Credit','Debit']; //Transfer
-        $scope.statusOptions = ['Status','Initiating','Processing','Pending','Complete','Failed'];
+        $scope.typeOptions = ['Type', 'Credit', 'Debit']; //Transfer
+        $scope.statusOptions = ['Status', 'Initiating', 'Processing', 'Pending', 'Complete', 'Failed'];
         $scope.currencyOptions = [];
-        $scope.orderByOptions = ['Largest','Latest','Smallest'];
+        $scope.orderByOptions = ['Largest', 'Latest', 'Smallest'];
 
-        vm.getTransactionUrl = function(){
+        vm.getTransactionUrl = function () {
             vm.filterParams = '?page=' + $scope.pagination.pageNo + '&page_size=' + $scope.pagination.itemsPerPage
                 + '&orderby=-created';
 
             return environmentConfig.API + '/transactions/' + vm.filterParams;
         };
 
-        $scope.getLatestTransactions = function(){
-            if(vm.token) {
+        $scope.getLatestTransactions = function () {
+            if (vm.token) {
                 $scope.transactionsStateMessage = '';
                 $scope.loadingTransactions = true;
 
@@ -53,7 +53,7 @@
                     if (res.status === 200) {
                         $scope.transactionsData = res.data.data;
                         $scope.transactionsList = $scope.transactionsData.results;
-                        console.log($scope.transactionsList)
+                        console.log($scope.transactionsData)
                         if ($scope.transactionsData.count == 0) {
                             $scope.transactionsStateMessage = 'No transactions have been made';
                             return;
@@ -74,39 +74,47 @@
         };
         $scope.getLatestTransactions();
 
-        $scope.openModal = function (page, size,transaction) {
-            vm.theModal = $uibModal.open({
-                animation: true,
-                templateUrl: page,
-                size: size,
-                controller: 'TransactionModalCtrl',
-                resolve: {
-                    transaction: function () {
-                        return transaction;
+        $scope.openModal = function (page, size, transaction) {
+            if (transaction.status == "Pending" && transaction.metadata.quote_id) {
+                $scope.gotoQuote(transaction.metadata.quote_id);
+            } else {
+                vm.theModal = $uibModal.open({
+                    animation: true,
+                    templateUrl: page,
+                    size: size,
+                    controller: 'TransactionModalCtrl',
+                    resolve: {
+                        transaction: function () {
+                            return transaction;
+                        }
                     }
-                }
-            });
+                });
 
-            vm.theModal.result.then(function(transaction){
-                if(transaction){
-                    $scope.searchParams = {
-                        searchId: '',
-                        searchUser: $state.params.code || '',
-                        searchDateFrom: '',
-                        searchDateTo: '',
-                        searchType: 'Type',
-                        searchStatus: 'Status',
-                        searchCurrency: {code: 'Currency'},
-                        searchOrderBy: 'Latest',
-                        searchSubType: ''
-                    };
-                    $scope.getLatestTransactions();
-                }
-            }, function(){
-            });
+                vm.theModal.result.then(function (transaction) {
+                    if (transaction) {
+                        $scope.searchParams = {
+                            searchId: '',
+                            searchUser: $state.params.code || '',
+                            searchDateFrom: '',
+                            searchDateTo: '',
+                            searchType: 'Type',
+                            searchStatus: 'Status',
+                            searchCurrency: {code: 'Currency'},
+                            searchOrderBy: 'Latest',
+                            searchSubType: ''
+                        };
+                        $scope.getLatestTransactions();
+                    }
+                }, function () {
+                });
+            }
+
         };
 
+        $scope.gotoQuote = function (id) {
+            $state.go('quote', {quote_id: id});
+        }
 
 
-     }
+    }
 })();

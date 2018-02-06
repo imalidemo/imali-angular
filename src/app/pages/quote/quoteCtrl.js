@@ -93,7 +93,6 @@
         } else {
             $scope.from_quote = false
             $scope.to_currency = $stateParams.to_currency
-            $scope.from_amount = $stateParams.from_amount
             $scope.active_quote = $stateParams.to_currency
         }
 
@@ -137,7 +136,8 @@
                 }
             }).then(function (res) {
                 $scope.loading = false;
-                $scope.modifyQuote({bank: res.data.data.id, email: $scope.newBankData.email});
+                console.log(res.data.data)
+                $scope.modifyQuote({bank: res.data.data, email: $scope.newBankData.email});
                 /* 
                  if (res.status === 201) {
                  vm.getBankAccounts();
@@ -171,6 +171,7 @@
                         $location.path('/home');
                         return;
                     }
+                    console.log(res.data.data)
                     vm.setActiveQuote(res.data.data);
                     vm.showPaymentTab(res.data.data);
                     vm.createTransaction(res.data.data,quote_id,data);
@@ -186,12 +187,18 @@
         };
 
         vm.createTransaction=function (quote_response,quote_id,metadata) {
-            var data={
+            var metadata1={
                 quote_id:quote_id,
                 quote:quote_response,
                 recipient:metadata.email,
                 bank_details:metadata.bank,
                 extra_field:''
+            }
+            var data = {
+                "amount": ($scope.to_currency.from_amount*(-1)),
+                "currency": "NGN",
+                "reference": "",
+                "metadata": JSON.stringify(metadata1)
             }
             $http.post(environmentConfig.API + '/transactions/credit/', data, {
                 headers: {

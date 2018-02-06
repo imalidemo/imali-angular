@@ -3,15 +3,15 @@
     <div class="panel-body">
         <p><strong>You send</strong></p>
         <p>
-            {{to_currency.to_currency.symbol}}{{from_amount}}
+            {{to_currency.from_currency.symbol}}{{(to_currency.from_amount* (-1))}}
 
         </p>
         <p><strong>They receive</strong></p>
         <p ng-hide="from_quote">
-            {{to_currency.from_currency.symbol}}{{to_currency.to_amount/100}}
+            {{to_currency.to_currency.symbol}}{{to_currency.to_amount}}
         </p>
         <p ng-show="from_quote">
-            {{to_currency.from_currency.symbol}}{{to_currency.to_amount/100}}
+            {{to_currency.from_currency.symbol}}{{to_currency.to_amount}}
         </p>
     </div>
     <loading-image ng-show="loading"></loading-image>
@@ -110,11 +110,6 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <label><strong>Recipient email <span class="required-icon">*</span></strong></label>
-        <input type="email" ng-model="newBankData.email" class="form-control"
-               placeholder="E.g hello@example.com" required>
-    </div>
     <div class="panel-body" ng-show="selected_account == -1">
         <p><strong>Add a new recipient</strong></p>
         <form name="bankAccountForm">
@@ -166,15 +161,20 @@
         </form>
     </div>
     <div class="form-group">
+        <label><strong>Recipient email <span class="required-icon">*</span></strong></label>
+        <input type="email" ng-model="newBankData.email" class="form-control"
+               placeholder="E.g hello@example.com">
+    </div>
+    <div class="form-group">
         <label><strong>Extra</strong></label>
-        <input type="text" ng-model="newBankData.bic" class="form-control">
+        <input type="text" ng-model="newBankData.extra" class="form-control">
     </div>
     <div class="form-group" ng-show="selected_account == -1">
         <button ng-disabled="!bankAccountForm.$valid" ng-click="addBankAccount(newBankData)"
                 class="btn btn-primary pull-right">Add
         </button>
     </div>
-    <div class="panel-btn" ng-hide="selected_account == -1">
+    <div ng-disabled="newBankData.email==''" class="panel-btn" ng-hide="selected_account == -1">
         <button ng-click="modifyQuote({bank:getSelectedAccount(),email:newBankData.email})" class="btn btn-primary pull-right">Next
         </button>
     </div>
@@ -239,6 +239,7 @@
     </div>
 </div>
 
+<!--
 <div ng-hide="active_quote.payment_claim">
     <div class="panel col-md-8" ng-show='tab == "payment" && !loading'>
         <div class="panel-heading"><h2>Confirm payment</h2></div>
@@ -255,4 +256,4 @@
             </button>
         </div>
     </div>
-</div>
+</div>-->

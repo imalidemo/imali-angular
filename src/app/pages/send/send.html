@@ -42,7 +42,7 @@
         </p>
         <p><strong>They receive</strong></p>
         <p ng-hide="loadingQuote">
-            {{to_currency.to_currency.symbol}}{{from_amount*(to_currency.fixed_rate/100)}}
+            {{to_currency.to_currency.symbol}}{{from_amount*((to_currency.fixed_rate ?to_currency.fixed_rate: to_currency.rate)/100)}}
         </p>
     </div>
     <div class="panel-btn">

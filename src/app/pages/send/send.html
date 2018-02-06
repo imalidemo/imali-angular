@@ -1,28 +1,26 @@
 <div class="ico-banner" ng-hide="allVerified">
-    <p>Our will review your information and let you know when you are fully verified.</p>
+    <p>Our team will review your information and let you know when you are fully verified.</p>
 </div>
 <register-progress></register-progress>
 <div class="panel col-md-6" ng-show='tab=="get_quote" && !loading'>
     <div class="panel-heading"><h2>Send money</h2></div>
     <div class="panel-body">
         <div class="form-group">
-            <label><strong>Select to currency</strong></label>
+            <label><strong>Currency</strong></label>
             <select ng-model="to_currency" class="form-control">
                 <option value="USD">USD</option>
                 <option value="GBP">GBP</option>
             </select>
         </div>
         <form class="form-horizontal">
-            <label class="control-label">Amount</label>
+            <label class="amount-text">Amount</label>
             <div class="input-group">
-                <span class="input-group-addon addon-left input-group-addon-default">₦</span>
-                <input type="text" class="form-control with-default-addon" placeholder="0.00" ng-model="from_amount">
-                <span class="input-group-addon addon-right input-group-addon-default">NGN</span>
+                <input type="text" class="form-control with-default-addon" placeholder="0.00" ng-model="to_amount">
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!from_amount || !allVerified || !to_currency"
-                            ng-click="getQuote(to_currency,from_amount)"
+                    <button ng-disabled="!to_amount || !allVerified || !to_currency"
+                            ng-click="getQuote(to_currency,to_amount)"
                             class="btn btn-primary pull-right">Next
                     </button>
                     <loading-image ng-show="loadingQuote"></loading-image>
@@ -36,18 +34,15 @@
     <div class="panel-heading"><h2>Confirm quote</h2></div>
     <div class="panel-body">
 
-        <p><strong>You send</strong></p>
-        <p ng-hide="loadingQuote">
-            {{to_currency.from_currency.symbol+from_amount}}
-        </p>
-        <p><strong>They receive</strong></p>
-        <p ng-hide="loadingQuote">
-            {{to_currency.to_currency.symbol}}{{from_amount*((to_currency.fixed_rate ?to_currency.fixed_rate: to_currency.rate)/100)}}
-        </p>
+        <p><strong>You send</strong> {{to_currency.from_currency.symbol}}{{to_amount/((to_currency.fixed_rate ?to_currency.fixed_rate: to_currency.rate)/100)}}</p>
+        <!--<p ng-hide="loadingQuote">
+            </p>-->
+        <p><strong>They receive</strong> {{to_currency.to_currency.symbol+to_amount}}</p>
+
     </div>
     <div class="panel-btn">
         <loading-image ng-show="savingQuote"></loading-image>
-        <button ng-disabled="savingQuote" ng-click="saveQuote(to_currency,from_amount)"
+        <button ng-disabled="savingQuote" ng-click="saveQuote(to_currency,to_amount)"
                 class="btn btn-primary pull-right">Accept
         </button>
         <button ng-disabled="savingQuote" ng-click='changeTab("get_quote")' class="btn btn-default pull-left">Back

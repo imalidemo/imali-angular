@@ -59,7 +59,10 @@
             $scope.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
             $scope.from_currency = quote.from_currency.code
             $scope.active_quote = quote;
-            if (quote) {
+            try {
+                quote.metadata = JSON.parse(quote.metadata);
+            }catch (e){}
+            if (quote.metadata.bank) {
                 vm.showPaymentTab(quote);
             }
         }
@@ -115,7 +118,8 @@
                                 bank_name: "Wells Fargo Bank",
                                 number: "4114145394",
                                 aba: " 121000248",
-                                swift: "WFBIUS6S"
+                                swift: "WFBIUS6S",
+                                email: "rafee+1@rehive.com"
                             },
                         ]
                         $scope.bankAccounts.splice(0, 0, item[0], item[1]);
@@ -159,14 +163,17 @@
             var metadata=JSON.stringify(data)
             var quote_id = $scope.active_quote.id;
             $scope.loading = true;
-            $http.patch(environmentConfig.EXCHANGE_API + '/user/quotes/' + quote_id + "/", {metadata:metadata}, {
+            $http.patch(environmentConfig.EXCHANGE_API + '/user/quotes/' + quote_id + "/", {recipient:data.email , metadata:metadata}, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': vm.token
                 }
             }).then(function (res) {
                 if (res.status >= 200 && res.status < 300) {
-                    if (res.data.data.status == "cancel") {
+                    console.log("Line 173")
+                    console.log(res.data.data)
+                    var metadata=JSON.parse(res.data.data.metadata)
+                    if (metadata.status == "cancel") {
                         $location.path('/home');
                         return;
                     }
@@ -211,13 +218,29 @@
         }
 
         vm.getCompanyBankAccount = function (quote) {
-            if (quote) {
-                var metadata=JSON.parse(quote.metadata)
-                $scope.companyBankData = metadata.bank
-            }
-            else
-                toastr.error("Please contact the admin to get bank details.");
-            $scope.loading = false;
+            $http.get(environmentConfig.API + '/company/bank-account/', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': vm.token
+                }
+            }).then(function (res) {
+                $scope.loading = false;
+                if(res.data.data.length>0){
+                    $scope.companyBankData = res.data.data[0].bank_account;
+                    $scope.reference = res.data.data[0].reference;
+                }
+                else{
+                    toastr.error("Please contact the admin to get bank details.");
+                }
+                console.log($scope.companyBankData);
+            }).catch(function (error) {
+                $scope.loading = false;
+                if (error.status == 403) {
+                    errorHandler.handle403();
+                    return;
+                }
+                errorToasts.evaluateErrors(error.data);
+            });
         };
 
         vm.findIndexOfBankAccount = function (element) {
@@ -251,6 +274,10 @@
             }, function () {
             });
         };
+
+        $scope.check = function(selected_account){
+            console.log(selected_account)
+        }
 
     }
 

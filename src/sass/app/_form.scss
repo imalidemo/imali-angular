@@ -394,7 +394,9 @@ label.custom-input-danger {
 .input-demo {
   line-height: 25px;
 }
-
+.amount-text{
+  font-size: 13px;
+}
 @mixin validationState($color, $focusColor) {
   .control-label {
     color: $default-text;

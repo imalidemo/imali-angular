@@ -10,7 +10,7 @@
         </tr>
         <tr class="pointer" ng-click="gotoConversion(quote)" ng-repeat="quote in quotes">
             <td>{{quote.id}}</td>
-            <td>{{quote.from_currency.symbol}} {{quote.from_amount}}</td>
+            <td>{{quote.from_currency.symbol}} {{quote.from_amount*(-1)}}</td>
             <td>{{quote.metadata.email}}</td>
             <td>{{quote.to_currency.symbol}} {{quote.to_amount}}</td>
             <td>{{(quote.rate/100).toString()}}</td>

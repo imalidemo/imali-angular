@@ -1,18 +1,8 @@
 <div class="panel col-md-8" ng-hide="loadingQuotes">
     <div class="panel-heading"><h2>Your quote</h2></div>
     <div class="panel-body">
-        <p><strong>You send</strong></p>
-        <p>
-            {{to_currency.from_currency.symbol}}{{(to_currency.from_amount* (-1))}}
-
-        </p>
-        <p><strong>They receive</strong></p>
-        <p ng-hide="from_quote">
-            {{to_currency.to_currency.symbol}}{{to_currency.to_amount}}
-        </p>
-        <p ng-show="from_quote">
-            {{to_currency.to_currency.symbol}}{{to_currency.to_amount}}
-        </p>
+        <p><strong>You send</strong> {{to_currency.from_currency.symbol}}{{(to_currency.from_amount* (-1))/100}}</p>
+        <p><strong>They receive</strong> {{to_currency.to_currency.symbol}}{{to_currency.to_amount/100}}</p>
     </div>
     <loading-image ng-show="loading"></loading-image>
     <div class="panel-btn">
@@ -21,12 +11,12 @@
 </div>
 <!-- SELECT BANK TAB -->
 <div class="panel col-md-8" ng-show='tab == "bank" && !(loading || loadingQuotes)'>
-    <div class="panel-heading"><h2>Select recipient</h2></div>
+    <div class="panel-heading"><h3>Place give me the bank account details for me to pay to the to_currency destination.</h3></div>
 
     <div class="panel-body">
         <select class="form-control"
                 ng-options="account.id as (account.name + ' ' + account.bank_name + ' ' + account.number)  for account in bankAccounts"
-                ng-model="selected_account"></select>
+                ng-model="selected_account" ng-change="check(selected_account)"></select>
         <hr>
         <div ng-hide="selected_account == -1">
 
@@ -115,6 +105,11 @@
         <form name="bankAccountForm">
             <div>
                 <div class="form-group">
+                    <label><strong>Recipient email <span class="required-icon">*</span></strong></label>
+                    <input type="email" ng-model="newBankData.email" class="form-control"
+                           placeholder="E.g hello@example.com">
+                </div>
+                <div class="form-group">
                     <label><strong>Account name/holder</strong> <span class="required-icon">*</span></label>
                     <input type="text" ng-model="newBankData.name" class="form-control" placeholder="E.g Currency Corp"
                            required>
@@ -160,7 +155,7 @@
             </div>
         </form>
     </div>
-    <div class="form-group">
+    <div class="form-group" ng-show="selected_account != -1 && selected_account!=-2">
         <label><strong>Recipient email <span class="required-icon">*</span></strong></label>
         <input type="email" ng-model="newBankData.email" class="form-control"
                placeholder="E.g hello@example.com">
@@ -195,7 +190,7 @@
     <div class="panel-heading" ng-hide="active_quote.payment_claim"><h2>Make payment</h2></div>
     <div class="panel-body">
         <p ng-hide="active_quote.payment_claim">You have to transfer exactly {{active_quote.from_currency.symbol}}
-            {{active_quote.from_amount}} to the bank
+            {{active_quote.from_amount*(-1)/100}} to the bank
             details below.</p>
         <hr ng-hide="active_quote.payment_claim">
         <table class="table table-bordered">

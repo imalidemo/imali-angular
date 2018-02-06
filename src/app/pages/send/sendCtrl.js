@@ -140,17 +140,17 @@
             errorToasts.evaluateErrors(error.data);
         });
 
-        $scope.saveQuote = function (to_currency, from_amount) {
+        $scope.saveQuote = function (to_currency, to_amount) {
             if (vm.token) {
                 /*var currency = $scope.getCurrency(to_currency);*/
 
-                var amount = from_amount;
+                var amount = to_amount;
                 $scope.savingQuote = true;
                 $http({
                     url: environmentConfig.EXCHANGE_API + '/user/quotes/',
                     method: "POST",
                     data: {
-                        from_amount: amount,
+                        to_amount: amount*100,
                         from_currency: to_currency.from_currency.code,
                         to_currency: to_currency.to_currency.code
                     },
@@ -161,7 +161,7 @@
                 }).then(function (res) {
                     var quote=res.data.data;
                     $state.go('quote',{
-                        to_currency:quote
+                        quote_id:quote.id
                     });
                 }).catch(function (error) {
                     $scope.savingQuote = false;
@@ -174,7 +174,7 @@
             }
 
         }
-        $scope.getQuote = function (from_currency, from_amount) {
+        $scope.getQuote = function (from_currency, to_amount) {
             if (from_currency === "USD") {
                 $scope.to_currency = $scope.USD_currency
             } else if (from_currency === "GBP") {

@@ -60,9 +60,6 @@
             $scope.to_amount=$scope.to_currency.to_amount/100
             $scope.from_currency = quote.from_currency.code
             $scope.active_quote = quote;
-            try {
-                quote.metadata = JSON.parse(quote.metadata);
-            }catch (e){}
             if (quote.metadata.bank) {
                 vm.showPaymentTab(quote);
             }
@@ -120,7 +117,7 @@
                                 number: "4114145394",
                                 aba: " 121000248",
                                 swift: "WFBIUS6S",
-                                email: "rafee+1@rehive.com"
+                                recipient: "rafee+1@rehive.com"
                             },
                         ]
                         $scope.bankAccounts.splice(0, 0, item[0], item[1]);
@@ -141,7 +138,7 @@
                 }
             }).then(function (res) {
                 $scope.loading = false;
-                $scope.modifyQuote({bank: res.data.data, email: $scope.newBankData.email});
+                $scope.modifyQuote({bank: res.data.data, recipient: $scope.newBankData.recipient,extra: $scope.newBankData.extra});
                 /* 
                  if (res.status === 201) {
                  vm.getBankAccounts();
@@ -161,17 +158,21 @@
         };
 
         $scope.modifyQuote = function (data) {
-            var metadata=JSON.stringify(data)
+            delete data["$$hasKey"];
             var quote_id = $scope.active_quote.id;
+            console.log(data);
+            if(!data.recipient){
+                data.recipient = data.bank.recipient;
+            }
             $scope.loading = true;
-            $http.patch(environmentConfig.EXCHANGE_API + '/user/quotes/' + quote_id + "/", {recipient:data.email , metadata:metadata}, {
+            $http.patch(environmentConfig.EXCHANGE_API + '/user/quotes/' + quote_id + "/", {recipient:data.recipient , metadata:data}, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': vm.token
                 }
             }).then(function (res) {
                 if (res.status >= 200 && res.status < 300) {
-                    var metadata=JSON.parse(res.data.data.metadata)
+                    var metadata=res.data.data.metadata
                     if (metadata.status == "cancel") {
                         $location.path('/home');
                         return;
@@ -194,15 +195,13 @@
             var metadata1={
                 quote_id:quote_id,
                 quote:quote_response,
-                recipient:metadata.email,
-                bank_details:metadata.bank,
-                extra_field:''
+                recipient:metadata.email
             }
             var data = {
                 "amount": ($scope.to_currency.from_amount*(-1)),
                 "currency": "NGN",
                 "reference": metadata1.recipient,
-                "metadata": JSON.stringify(metadata1)
+                "metadata": metadata1
             }
             $http.post(environmentConfig.API + '/transactions/credit/', data, {
                 headers: {
@@ -226,7 +225,7 @@
                 $scope.loading = false;
                 if(res.data.data.length>0){
                     $scope.companyBankData = res.data.data[0].bank_account;
-                    $scope.reference = res.data.data[0].reference;
+                    $scope.companyBankData.reference = res.data.data[0].reference;
                 }
                 else{
                     toastr.error("Please contact the admin to get bank details.");

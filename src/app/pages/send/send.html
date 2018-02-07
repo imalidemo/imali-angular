@@ -2,7 +2,7 @@
     <p>Our team will review your information and let you know when you are fully verified.</p>
 </div>
 <register-progress></register-progress>
-<div class="panel col-md-6" ng-show='tab=="get_quote" && !loading'>
+<div class="panel col-md-8" ng-show='tab=="get_quote" && !loading'>
     <div class="panel-heading"><h2>Send money</h2></div>
     <div class="panel-body">
         <div class="form-group">
@@ -30,14 +30,14 @@
     </div>
 </div>
 
-<div class="panel col-md-6" ng-show='tab=="show_quote" && !loading'>
+<div class="panel col-md-8" ng-show='tab=="show_quote" && !loading'>
     <div class="panel-heading"><h2>Confirm quote</h2></div>
     <div class="panel-body">
-
-        <p><strong>You send</strong> {{to_currency.from_currency.symbol}} {{to_amount/((to_currency.fixed_rate ?to_currency.fixed_rate: to_currency.rate)/100)}}</p>
-        <!--<p ng-hide="loadingQuote">
-            </p>-->
-        <p><strong>They receive</strong> {{to_currency.to_currency.symbol+" "+to_amount}}</p>
+        <p><strong>You pay</strong></p>
+        <p>{{to_currency.from_currency.symbol}} {{to_amount/((to_currency.fixed_rate ?to_currency.fixed_rate: to_currency.rate)/100)}}</p>
+        <br>
+        <p><strong>They receive</strong></p>
+        <p>{{to_currency.to_currency.symbol+" "+to_amount}}</p>
 
     </div>
     <div class="panel-btn">

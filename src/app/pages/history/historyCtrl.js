@@ -67,12 +67,7 @@
                     var quote = quotes[i];
                     quote.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
                     quote.to_amount = quote.to_amount / Math.pow(10, quote.to_currency.divisibility);
-                    try{
-                        quote.metadata = JSON.parse(quote.metadata);
-                    }
-                    catch (e){
 
-                    }
                 }
                 $scope.quotes = quotes;
             }).catch(function (error) {

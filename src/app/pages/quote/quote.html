@@ -1,8 +1,8 @@
 <div class="panel col-md-8" ng-hide="loadingQuotes">
     <div class="panel-heading"><h2>Your quote</h2></div>
     <div class="panel-body">
-        <p><strong>You send</strong> {{to_currency.from_currency.symbol}}{{(to_currency.from_amount* (-1))/100}}</p>
-        <p><strong>They receive</strong> {{to_currency.to_currency.symbol}}{{to_currency.to_amount/100}}</p>
+        <p><strong>You send</strong> {{to_currency.from_currency.symbol}} {{from_amount}}</p>
+        <p><strong>They receive</strong> {{to_currency.to_currency.symbol}} {{to_amount}}</p>
     </div>
     <loading-image ng-show="loading"></loading-image>
     <div class="panel-btn">
@@ -11,7 +11,7 @@
 </div>
 <!-- SELECT BANK TAB -->
 <div class="panel col-md-8" ng-show='tab == "bank" && !(loading || loadingQuotes)'>
-    <div class="panel-heading"><h3>Place give me the bank account details for me to pay to the to_currency destination.</h3></div>
+    <div class="panel-heading"><h3>Recipient account details for me to pay to the to_currency destination.</h3></div>
 
     <div class="panel-body">
         <select class="form-control"

@@ -34,10 +34,10 @@
     <div class="panel-heading"><h2>Confirm quote</h2></div>
     <div class="panel-body">
 
-        <p><strong>You send</strong> {{to_currency.from_currency.symbol}}{{to_amount/((to_currency.fixed_rate ?to_currency.fixed_rate: to_currency.rate)/100)}}</p>
+        <p><strong>You send</strong> {{to_currency.from_currency.symbol}} {{to_amount/((to_currency.fixed_rate ?to_currency.fixed_rate: to_currency.rate)/100)}}</p>
         <!--<p ng-hide="loadingQuote">
             </p>-->
-        <p><strong>They receive</strong> {{to_currency.to_currency.symbol+to_amount}}</p>
+        <p><strong>They receive</strong> {{to_currency.to_currency.symbol+" "+to_amount}}</p>
 
     </div>
     <div class="panel-btn">

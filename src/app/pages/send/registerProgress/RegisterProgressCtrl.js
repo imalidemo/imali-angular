@@ -43,9 +43,6 @@
                             return;
                         }
 
-                        if($scope.user.kyc.status == "verified"){
-                            $scope.allVerified = true;
-                        }
                         $http.get(environmentConfig.API + '/user/address/', {
                             headers: {
                                 'Content-Type': 'application/json',
@@ -59,6 +56,9 @@
                                 }
                                 if($scope.address.status =='verified') {
                                     $rootScope.addressVerified = "v";
+                                    if($rootScope.emailVerified == true && $rootScope.mobileVerified == true && $rootScope.addressVerified=="v" && $rootScope.idDocumentsVerified=='v'){
+                                        $scope.allVerified = true;
+                                    }
                                 }
                                 else if($scope.address.status =='pending') {
                                     $rootScope.addressVerified = "p";
@@ -100,6 +100,9 @@
             userVerification.verifyMobile(function(err,verified){
                 if(verified){
                     $rootScope.mobileVerified = true;
+                    if($rootScope.emailVerified == true && $rootScope.mobileVerified == true && $rootScope.addressVerified=="v" && $rootScope.idDocumentsVerified=="v"){
+                        $scope.allVerified = true;
+                    }
                     $scope.loadingRegisterProgressView = false;
                 } else {
                     $rootScope.mobileVerified = false;
@@ -125,6 +128,9 @@
                             $scope.goToGetVerified("/document/verify/ID")
                         }
                         $rootScope.idDocumentsVerified = vm.checkDocumentsArrayVerification($scope.idDocuments);
+                        if($rootScope.emailVerified == true && $rootScope.mobileVerified == true && $rootScope.addressVerified==true && $rootScope.idDocumentsVerified=='v'){
+                            $scope.allVerified = true;
+                        }
                     }
                 }).catch(function (error) {
                     $scope.loadingRegisterProgressView = false;

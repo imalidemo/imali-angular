@@ -72,7 +72,7 @@
                             }
                         }
                     }
-                    if($scope.status == 'verified'){
+                    if($scope.status == 'verified' || $scope.status=='pending'){
                         $scope.goToNextView();
                     }
                     $scope.loadingDocumentsIDView = false;

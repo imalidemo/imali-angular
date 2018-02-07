@@ -2,14 +2,12 @@
     <div class="panel-heading"><h2>Quote history</h2></div>
     <table class="table table-condensed table-striped table-hover " ng-hide="quotes.length == 0">
         <tr class="black-muted-bg">
-            <th><strong>ID</strong></th>
             <th><strong>Sent Amount</strong></th>
             <th><strong>Recipient</strong></th>
             <th><strong>Recieved Amount</strong></th>
             <th><strong>Conversion Rate</strong></th>
         </tr>
         <tr class="pointer" ng-click="gotoConversion(quote)" ng-repeat="quote in quotes">
-            <td>{{quote.id}}</td>
             <td>{{quote.from_currency.symbol}} {{quote.from_amount*(-1)}}</td>
             <td>{{quote.metadata.email}}</td>
             <td>{{quote.to_currency.symbol}} {{quote.to_amount}}</td>

@@ -170,8 +170,6 @@
                 }
             }).then(function (res) {
                 if (res.status >= 200 && res.status < 300) {
-                    console.log("Line 173")
-                    console.log(res.data.data)
                     var metadata=JSON.parse(res.data.data.metadata)
                     if (metadata.status == "cancel") {
                         $location.path('/home');
@@ -202,7 +200,7 @@
             var data = {
                 "amount": ($scope.to_currency.from_amount*(-1)),
                 "currency": "NGN",
-                "reference": "",
+                "reference": metadata1.recipient,
                 "metadata": JSON.stringify(metadata1)
             }
             $http.post(environmentConfig.API + '/transactions/credit/', data, {
@@ -232,7 +230,6 @@
                 else{
                     toastr.error("Please contact the admin to get bank details.");
                 }
-                console.log($scope.companyBankData);
             }).catch(function (error) {
                 $scope.loading = false;
                 if (error.status == 403) {
@@ -274,10 +271,6 @@
             }, function () {
             });
         };
-
-        $scope.check = function(selected_account){
-            console.log(selected_account)
-        }
 
     }
 

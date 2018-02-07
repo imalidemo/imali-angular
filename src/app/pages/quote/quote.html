@@ -16,7 +16,7 @@
     <div class="panel-body">
         <select class="form-control"
                 ng-options="account.id as (account.name + ' ' + account.bank_name + ' ' + account.number)  for account in bankAccounts"
-                ng-model="selected_account" ng-change="check(selected_account)"></select>
+                ng-model="selected_account"></select>
         <hr>
         <div ng-hide="selected_account == -1">
 

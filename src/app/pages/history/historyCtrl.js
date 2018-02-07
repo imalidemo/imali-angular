@@ -65,7 +65,6 @@
                 var quotes = res.data.data.results;
                 for (var i = 0; i < quotes.length; i++) {
                     var quote = quotes[i];
-                    console.log(quote)
                     quote.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
                     quote.to_amount = quote.to_amount / Math.pow(10, quote.to_currency.divisibility);
                     try{

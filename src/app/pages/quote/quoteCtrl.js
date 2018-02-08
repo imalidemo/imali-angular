@@ -5,7 +5,7 @@
         .controller('QuoteCtrl', QuoteCtrl);
 
     /** @ngInject */
-    function QuoteCtrl($scope, $stateParams, environmentConfig, $uibModal, toastr, $http, $location, cookieManagement, errorToasts, $window, errorHandler) {
+    function QuoteCtrl($scope, $stateParams,currencyModifiers, environmentConfig, $uibModal, toastr, $http, $location, cookieManagement, errorToasts, $window, errorHandler) {
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
@@ -56,8 +56,11 @@
 
         vm.setActiveQuote = function (quote) {
             $scope.to_currency = quote
-            $scope.from_amount = ($scope.to_currency.from_amount* (-1))/100
-            $scope.to_amount=$scope.to_currency.to_amount/100
+            console.log($scope.to_currency)
+            $scope.from_amount=currencyModifiers.convertFromCents($scope.to_currency.from_amount* (-1),$scope.to_currency.from_currency.divisibility);
+            /*$scope.from_amount = ($scope.to_currency.from_amount* (-1))/100*/
+            /*$scope.to_amount=$scope.to_currency.to_amount/100*/
+            $scope.to_amount=currencyModifiers.convertFromCents($scope.to_currency.to_amount,$scope.to_currency.to_currency.divisibility);
             $scope.from_currency = quote.from_currency.code
             $scope.active_quote = quote;
             if (quote.metadata.bank) {

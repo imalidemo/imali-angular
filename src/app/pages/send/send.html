@@ -34,7 +34,8 @@
     <div class="panel-heading"><h2>Confirm quote</h2></div>
     <div class="panel-body">
         <p><strong>You pay</strong></p>
-        <p>{{to_currency.from_currency.symbol}} {{to_amount/((to_currency.fixed_rate ?to_currency.fixed_rate: to_currency.rate)/100)}}</p>
+        <p>{{to_currency.from_currency.symbol}} {{NGNInCents}}</p>
+<!--        <p ng-bind="NGNInCents  | currencyModifiersFilter: NGN.divisibility"></p>-->
         <br>
         <p><strong>They receive</strong></p>
         <p>{{to_currency.to_currency.symbol+" "+to_amount}}</p>

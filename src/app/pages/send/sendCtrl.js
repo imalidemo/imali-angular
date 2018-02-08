@@ -5,7 +5,7 @@
         .controller('SendCtrl', SendCtrl);
 
     /** @ngInject */
-    function SendCtrl($rootScope, $state, $scope, $location, $uibModal, toastr, cookieManagement, environmentConfig, $http, errorToasts, errorHandler, $window) {
+    function SendCtrl($rootScope, $state, $scope, $location, $uibModal, currencyModifiers, toastr, cookieManagement, environmentConfig, $http, errorToasts, errorHandler, $window) {
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
@@ -145,12 +145,13 @@
                 /*var currency = $scope.getCurrency(to_currency);*/
 
                 var amount = to_amount;
+                $scope.toAmountInCents=currencyModifiers.convertToCents((to_amount),to_currency.to_currency.divisibility);
                 $scope.savingQuote = true;
                 $http({
                     url: environmentConfig.EXCHANGE_API + '/user/quotes/',
                     method: "POST",
                     data: {
-                        to_amount: amount*100,
+                        to_amount: $scope.toAmountInCents,
                         from_currency: to_currency.from_currency.code,
                         to_currency: to_currency.to_currency.code
                     },
@@ -160,6 +161,7 @@
                     }
                 }).then(function (res) {
                     var quote=res.data.data;
+                    console.log(quote)
                     $state.go('quote',{
                         quote_id:quote.id
                     });
@@ -180,6 +182,8 @@
             } else if (from_currency === "GBP") {
                 $scope.to_currency = $scope.GBP_currency
             }
+            console.log($scope.to_currency)
+            $scope.NGNInCents = to_amount * ($scope.to_currency.fixed_rate ? $scope.to_currency.fixed_rate: $scope.to_currency.rate)
             $scope.changeTab('show_quote');
         }
 

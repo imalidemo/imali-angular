@@ -182,8 +182,7 @@
             } else if (from_currency === "GBP") {
                 $scope.to_currency = $scope.GBP_currency
             }
-            console.log($scope.to_currency)
-            $scope.NGNInCents = to_amount * ($scope.to_currency.fixed_rate ? $scope.to_currency.fixed_rate: $scope.to_currency.rate)
+            $scope.NGNInCents = to_amount / ($scope.to_currency.fixed_rate ? $scope.to_currency.fixed_rate: $scope.to_currency.rate)
             $scope.changeTab('show_quote');
         }
 

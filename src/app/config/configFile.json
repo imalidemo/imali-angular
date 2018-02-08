@@ -21,7 +21,7 @@
   },
   "production": {
     "environmentConfig": {
-      "API": "https://rehive.com/api/3",
+      "API": "https://api.rehive.com/3",
       "COMPANY": "imali_demo",
       "EXCHANGE_API": "https://conversion.services.rehive.io/api",
       "ICO_API": "https://ico.services.rehive.io/api",

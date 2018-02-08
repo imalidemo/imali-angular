@@ -161,7 +161,7 @@
             delete data["$$hasKey"];
             var quote_id = $scope.active_quote.id;
             console.log(data);
-            if(!data.recipient){
+            if(!data.recipient && data.status!='cancel'){
                 data.recipient = data.bank.recipient;
             }
             $scope.loading = true;

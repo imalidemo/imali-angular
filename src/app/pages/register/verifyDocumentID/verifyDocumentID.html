@@ -9,7 +9,7 @@
             complete the verification within 48 hours. You'll be notified via email if your documents are verified or
             not.</p>
         <p ng-show="status == 'pending'">Our team is currently reviewing your documents and will shortly get back to you.</p>
-        <p ng-show="status == 'declined'">Your document has been declined. Please carefully read our terms of service and follow this guide for 
+        <p ng-show="status == 'declined'">Your document has been declined. Please carefully read our terms of service and follow this guide for
             requirements and specifications to get approved.</p>
         <br>
 
@@ -33,8 +33,9 @@
                 </tr>
             </table>
             <div>
-                <button ng-hide="documents.length > 0" ng-click="openAddUserDocumentModal('app/pages/register/verifyDocumentID/addDocumentIDModal/addDocumentIDModal.html','lg')"
-                        class="btn btn-primary {{documents.length > 0 ? 'btn-default':'btn-primary'}} pull-right">Upload
+                <button ng-hide="documents.length > 0"
+                        ng-click="openAddUserDocumentModal('app/pages/register/verifyDocumentID/addDocumentIDModal/addDocumentIDModal.html','lg')"
+                        class="btn btn-lg btn-primary btn-auth pull-right">Upload
                 </button>
                 <button ng-click="goToNextView()" ng-show="documents.length > 0"
                         class="btn {{documents.length > 0 ? 'btn-primary':'btn-danger'}} pull-right">Next
@@ -49,8 +50,8 @@
         </form>
     </div>
 </div>
-<!--<div class="auth-main " ng-show="loadingDocumentsIDView">-->
-    <!--<div class="auth-block verification-text">-->
-        <!--<loading-image></loading-image>-->
-    <!--</div>-->
-<!--</div>-->
+<div class="auth-main " ng-show="loadingDocumentsIDView">
+    <div class="loading-auth-block verification-text">
+        <loading-image></loading-image>
+    </div>
+</div>

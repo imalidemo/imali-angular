@@ -11,7 +11,7 @@
             <td>{{quote.from_currency.symbol}} {{quote.from_amount*(-1)}}</td>
             <td>{{quote.metadata.recipient}}</td>
             <td>{{quote.to_currency.symbol}} {{quote.to_amount}}</td>
-            <td>{{(quote.rate/100).toString()}}</td>
+            <td>{{(quote.fixed_rate ? quote.fixed_rate : quote.rate).toString()}}</td>
         </tr>
     </table>
     <div>

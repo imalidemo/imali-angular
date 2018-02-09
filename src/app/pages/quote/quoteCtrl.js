@@ -226,6 +226,7 @@
                 }
             }).then(function (res) {
                 $scope.loading = false;
+                console.log(res.data.data)
                 if(res.data.data.length>0){
                     $scope.companyBankData = res.data.data[0].bank_account;
                     $scope.companyBankData.reference = res.data.data[0].reference;

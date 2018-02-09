@@ -9,13 +9,12 @@
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
-
+        $scope.to_currency={};
         $scope.pagination = {
             itemsPerPage: 26,
             pageNo: 1,
             maxSize: 5
         };
-
         $scope.currencies = [
             {
                 "code": "USD",
@@ -161,7 +160,6 @@
                     }
                 }).then(function (res) {
                     var quote=res.data.data;
-                    console.log(quote)
                     $state.go('quote',{
                         quote_id:quote.id
                     });
@@ -182,7 +180,13 @@
             } else if (from_currency === "GBP") {
                 $scope.to_currency = $scope.GBP_currency
             }
-            $scope.NGNInCents = to_amount / ($scope.to_currency.fixed_rate ? $scope.to_currency.fixed_rate: $scope.to_currency.rate)
+            if($scope.to_currency.fixed_rate){
+                $scope.rate=$scope.to_currency.fixed_rate
+            }else{
+                $scope.rate=$scope.to_currency.rate
+            }
+            $scope.NGNInCents=currencyModifiers.convertToCents((to_amount),$scope.to_currency.from_currency.divisibility);
+            $scope.NGNInCents =$scope.NGNInCents / $scope.rate
             $scope.changeTab('show_quote');
         }
 

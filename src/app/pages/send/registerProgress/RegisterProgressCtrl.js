@@ -31,6 +31,11 @@
                 }).then(function (res) {
                     if (res.status === 200) {
                         $scope.user = res.data.data;
+                        console.log($scope.user)
+                        // if($scope.user.kyc.status=='verified'){
+                        //     $rootScope.kycVerified=true
+                        //     $location.path('/home');
+                        // }
                         vm.checkingEmailVerfication(res.data.data.email);
                         if($scope.user.status =='verified') {
                             $rootScope.addressVerified = "v";

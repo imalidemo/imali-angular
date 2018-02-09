@@ -8,9 +8,9 @@
             <th><strong>Conversion Rate</strong></th>
         </tr>
         <tr class="pointer" ng-click="gotoConversion(quote)" ng-repeat="quote in quotes">
-            <td>{{quote.from_currency.symbol}} {{quote.from_amount*(-1)}}</td>
+            <td>{{quote.from_currency.symbol}} <span ng-bind="quote.from_amount*(-1)  | currencyModifiersFilter: quote.from_currency.divisibility | preciseRound: quote.from_currency.divisibility"></span></td>
             <td>{{quote.metadata.recipient}}</td>
-            <td>{{quote.to_currency.symbol}} {{quote.to_amount}}</td>
+            <td>{{quote.to_currency.symbol}} <span ng-bind="quote.to_amount  | currencyModifiersFilter: quote.to_currency.divisibility | preciseRound: quote.to_currency.divisibility"></span></td>
             <td>{{(quote.fixed_rate ? quote.fixed_rate : quote.rate).toString()}}</td>
         </tr>
     </table>

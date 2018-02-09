@@ -5,14 +5,14 @@
         .controller('QuoteCtrl', QuoteCtrl);
 
     /** @ngInject */
-    function QuoteCtrl($scope, $stateParams,currencyModifiers, environmentConfig, $uibModal, toastr, $http, $location, cookieManagement, errorToasts, $window, errorHandler) {
+    function QuoteCtrl($scope, $stateParams,currencyModifiers, environmentConfig, $timeout, $uibModal, toastr, $http, $location, cookieManagement, errorToasts, $window, errorHandler) {
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
         $scope.selected_account = -1;
         $scope.tab = "bank";
         $scope.loading = true;
-        $scope.loadingQuotes = false;
+        $scope.loadingActiveQuotes = true;
         $scope.newBankData = {};
         $scope.companyBankData = {};
         $scope.active_quote = {};
@@ -55,16 +55,21 @@
         }
 
         vm.setActiveQuote = function (quote) {
-            $scope.to_currency = quote
-            console.log($scope.to_currency)
-            $scope.from_amount=currencyModifiers.convertFromCents($scope.to_currency.from_amount* (-1),$scope.to_currency.from_currency.divisibility);
+            $scope.to_currency = quote;
+            console.log($scope.to_currency);
+            $scope.from_amount=$scope.to_currency.from_amount* (-1);
             /*$scope.from_amount = ($scope.to_currency.from_amount* (-1))/100*/
             /*$scope.to_amount=$scope.to_currency.to_amount/100*/
-            $scope.to_amount=currencyModifiers.convertFromCents($scope.to_currency.to_amount,$scope.to_currency.to_currency.divisibility);
-            $scope.from_currency = quote.from_currency.code
+            $scope.to_amount=$scope.to_currency.to_amount;
+            $scope.from_currency = quote.from_currency.code;
             $scope.active_quote = quote;
+
+            $scope.loadingActiveQuotes = false;
             if (quote.metadata.bank) {
                 vm.showPaymentTab(quote);
+            }
+            else {
+
             }
         }
 
@@ -75,14 +80,13 @@
                     'Authorization': vm.token
                 }
             }).then(function (res) {
-                $scope.loadingQuotes = false;
                 if (res.data.data.length == 0)
                     $location.path('/transactions');
                 else{
                     vm.setActiveQuote(res.data.data);
                 }
             }).catch(function (error) {
-                $scope.loadingQuotes = false;
+                $scope.loadingActiveQuotes = false;
                 if (error.status == 403) {
                     errorHandler.handle403();
                     return;
@@ -226,7 +230,6 @@
                 }
             }).then(function (res) {
                 $scope.loading = false;
-                console.log(res.data.data)
                 if(res.data.data.length>0){
                     $scope.companyBankData = res.data.data[0].bank_account;
                     $scope.companyBankData.reference = res.data.data[0].reference;

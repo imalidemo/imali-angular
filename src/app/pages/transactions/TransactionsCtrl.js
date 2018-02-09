@@ -5,7 +5,7 @@
         .controller('TransactionsCtrl', TransactionsCtrl);
 
     /** @ngInject */
-    function TransactionsCtrl($location, $scope, environmentConfig, $http, cookieManagement, $uibModal, errorToasts, $state, $window, errorHandler) {
+    function TransactionsCtrl($location, $scope, environmentConfig, $http,currencyModifiers, cookieManagement, $uibModal, errorToasts, $state, $window, errorHandler) {
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');

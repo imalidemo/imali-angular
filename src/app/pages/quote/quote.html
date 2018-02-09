@@ -1,11 +1,15 @@
-<div class="panel col-md-8" ng-hide="loadingQuotes">
+<div class="panel col-md-8" ng-show="loadingActiveQuotes">
+    <loading-image></loading-image>
+</div>
+<div class="panel col-md-8" ng-hide="loadingActiveQuotes">
     <div class="panel-heading"><h2>Your quote</h2></div>
     <div class="panel-body">
         <p><strong>You pay</strong></p>
-        <p>{{to_currency.from_currency.symbol}} {{from_amount}}</p>
+        <p>{{to_currency.from_currency.symbol}} <span ng-bind="from_amount  | currencyModifiersFilter: to_currency.from_currency.divisibility | preciseRound: to_currency.from_currency.divisibility"></span></p>
         <br>
         <p><strong>They receive</strong></p>
-        <p>{{to_currency.to_currency.symbol}} {{to_amount}}</p>
+        <p>{{to_currency.to_currency.symbol}} <span ng-bind="to_amount  | currencyModifiersFilter: to_currency.to_currency.divisibility | preciseRound: to_currency.to_currency.divisibility"></span></p>
+
     </div>
     <loading-image ng-show="loading"></loading-image>
     <div class="panel-btn">
@@ -13,7 +17,7 @@
     </div>
 </div>
 <!-- SELECT BANK TAB -->
-<div class="panel col-md-8" ng-show='tab == "bank" && !(loading || loadingQuotes)'>
+<div class="panel col-md-8" ng-show='tab == "bank" && !(loading || loadingActiveQuotes)'>
     <div class="panel-heading"><h3>Add recipient</h3></div>
 
     <div class="panel-body">
@@ -179,7 +183,7 @@
 </div>
 
 <!-- MAKE PAYMENT TAB -->
-<div class="panel col-md-8" ng-show='tab == "payment" && !loading'>
+<div class="panel col-md-8" ng-show='tab == "payment" && !loading && !loadingActiveQuotes'>
     <div ng-show="active_quote.payment_claim">
         <div class="panel-heading"><h2>Payment claimed</h2></div>
         <p>If you see this message, it means you've indicated that you've made the payment. Our team will first

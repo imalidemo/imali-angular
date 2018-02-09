@@ -62,14 +62,7 @@
             }).then(function (res) {
                 $scope.loadingQuotes = false;
                 $scope.quotesData=res.data.data
-                var quotes = res.data.data.results;
-                for (var i = 0; i < quotes.length; i++) {
-                    var quote = quotes[i];
-                    quote.from_amount = quote.from_amount / Math.pow(10, quote.from_currency.divisibility);
-                    quote.to_amount = quote.to_amount / Math.pow(10, quote.to_currency.divisibility);
-
-                }
-                $scope.quotes = quotes;
+                $scope.quotes = res.data.data.results;
             }).catch(function (error) {
                 $scope.loadingQuotes = false;
                 if (error.status == 403) {

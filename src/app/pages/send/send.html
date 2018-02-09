@@ -2,15 +2,16 @@
     <p>Our team will review your information and let you know when you are fully verified.</p>
 </div>
 <register-progress></register-progress>
-<div class="panel col-md-8" ng-show='tab=="get_quote" && !loading'>
+<div class="panel col-md-8" ng-show='tab=="get_quote" && !loading && allVerified '>
     <div class="panel-heading"><h2>Send money</h2></div>
     <div class="panel-body">
         <div class="form-group">
             <label><strong>Currency</strong></label>
-            <select ng-model="to_currency" class="form-control">
+            <select ng-model="to_currency" class="form-control-currency form-control">
                 <option value="USD">USD</option>
                 <option value="GBP">GBP</option>
             </select>
+
         </div>
         <form class="form-horizontal">
             <label class="amount-text">Amount</label>
@@ -34,11 +35,15 @@
     <div class="panel-heading"><h2>Confirm quote</h2></div>
     <div class="panel-body">
         <p><strong>You pay</strong></p>
-        <p>{{to_currency.from_currency.symbol}} {{NGNInCents}}</p>
-<!--        <p ng-bind="NGNInCents  | currencyModifiersFilter: NGN.divisibility"></p>-->
+        <p>{{to_currency.from_currency.symbol}} <span
+                ng-bind="NGNInCents  | currencyModifiersFilter: to_currency.from_currency.divisibility | preciseRound: to_currency.from_currency.divisibility"></span>
+        </p>
+        <!--        <p ng-bind="NGNInCents  | currencyModifiersFilter: NGN.divisibility"></p>-->
         <br>
         <p><strong>They receive</strong></p>
-        <p>{{to_currency.to_currency.symbol+" "+to_amount}}</p>
+        <p>{{to_currency.to_currency.symbol}} <span
+                ng-bind="to_amount  | currencyModifiersFilter: 0 | preciseRound: to_currency.to_currency.divisibility"></span>
+        </p>
 
     </div>
     <div class="panel-btn">

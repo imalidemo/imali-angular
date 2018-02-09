@@ -112,6 +112,9 @@
                 if (res.status === 200) {
                     $scope.loadingBasicInfoView = false;
                     $scope.address = res.data.data;
+                    if($scope.address.status=='verified'){
+                        $scope.goToNextView()
+                    }
                 }
             }).catch(function (error) {
                 $scope.loadingBasicInfoView = false;

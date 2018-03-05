@@ -114,8 +114,15 @@ gulp.task('productionEnv', function () {
       .pipe(gulp.dest('./src/app/config/'))
 });
 
+gulp.task('placeholderEnv', function () {
+  gulp.src('./src/app/config/configFile.json')
+      .pipe(gulpNgConfig('BlurAdmin.config',{environment: 'placeholder'}))
+      .pipe(gulp.dest('./src/app/config/'))
+});
+
 gulp.task('build', ['productionEnv','html', 'fonts', 'other']);
 
 gulp.task('build:staging', ['stagingEnv','html', 'fonts', 'other']);
 gulp.task('build:local', ['localEnv','html', 'fonts', 'other']);
 gulp.task('build:production', ['productionEnv','html', 'fonts', 'other']);
+gulp.task('build:placeholder', ['placeholderEnv','html', 'fonts', 'other']);

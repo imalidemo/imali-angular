@@ -1,5 +1,5 @@
-project_name: rehive-dashboard
-docker_image: gcr.io/rehive-services/rehive-dashboard-staging
+project_name: imali-app
+docker_image: gcr.io/rehive-services/imali-app
 venv_python: ~/anaconda/envs/zapgo-core/bin/python3.5
 helm_chart: rehive/rehive-service
 helm_chart_version: 0.1.32
@@ -7,12 +7,12 @@ configs:
     staging:
       project: rehive-services
       cluster: staging
-      namespace: rehive-dashboard-staging
+      namespace: imali-app-staging
       helm_values_path: ./etc/helm/staging/values.yaml
       env_dir: ./etc/helm/staging/
     production:
       project: rehive-services
       cluster: production
-      namespace: rehive-dashboard
+      namespace: imali-app
       helm_values_path: ./etc/helm/production/values.yaml
       env_dir: ./etc/helm/production/

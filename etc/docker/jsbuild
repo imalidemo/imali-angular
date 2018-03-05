@@ -9,4 +9,6 @@ WORKDIR /app
 # TODO: figure out user/ permission issues
 RUN npm install && bower install --allow-root
 COPY src/ /app/src/
+# API url is set to a placeholder, needs to be configured in entrypoint script.
+CMD bash -c 'gulp clean && gulp build:placeholder'
 

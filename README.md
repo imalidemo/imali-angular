@@ -21,26 +21,14 @@ Rehive's back office dashboard is an open sourced project in Angular JS which ad
 * cd into `dashboard-angular`
 * run `npm install` to install the dependencies,
 * to run local copy in development mode, execute: `gulp serve`,
-* to run local copy in staging mode, with the rehive staging API (`https://staging.rehive.com/api/3/`), execute: `gulp serve:staging`,
+* to run local copy in staging mode, with the rehive staging API (`https://api.staging.rehive.com/api/3`), execute: `gulp serve:staging`,
 * to run local copy in production mode, execute: `gulp serve:dist`.
 
-Deployment pre-requisites:
---------------------------
-1. `pip install invoke python-dotenv fabric3 pyyaml semver nose`
-2. Helm client: https://docs.helm.sh/using_helm/#installing-helm Be sure to install this version: `https://github.com/kubernetes/helm/releases/tag/v2.4.2`
-
-Deployment:
------------
-1. Commit all changes and then tag and push the release with the following command:  
-`inv local.git_release`  
-The default version increment is `prerelease`, but you can also specify `patch`, `minor` or `major`:
-`inv local.git_release -v patch`
-
-2. Build and push the docker image for this release:  
-`inv local.docker_release production` or `inv server.docker_release production`
-
-3. Update kubernetes deployment using the version number of the release. E.g.  
-`inv k8s.upgrade production 0.0.1`
+### Deployment
+* commit all changes
+* run `inv git_release` to increment the version and tag the release
+* wait for the build trigger or run `inv cloudbuild <version>` to build and upload the latest docker image
+* run `inv upgrade production` to add the latest image to kubernetes deployment
 
 ### Where can I learn more ?
 

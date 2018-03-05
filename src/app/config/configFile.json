@@ -1,32 +1,30 @@
 {
   "staging": {
     "environmentConfig": {
-      "API": "https://rehive.com/api/3",
+      "API": "https://api.staging.rehive.com/3",
       "COMPANY": "imali_demo",
-      "EXCHANGE_API": "http://45.55.183.106:8000/api",
-      "ICO_API": "https://ico.s.services.rehive.io/api",
-      "XBT_API": "https://bitcoin.s.services.rehive.com/api/1",
-      "ETH_API": "https://ethereum.s.services.rehive.io/api/1"
+      "EXCHANGE_API": "https://conversion.s.services.rehive.io/api"
     }
   },
   "local": {
     "environmentConfig": {
-      "API": "https://rehive.com/api/3",
+      "API": "https://api.staging.rehive.com/3",
       "COMPANY": "imali_demo",
-      "EXCHANGE_API": "http://45.55.183.106:8000/api",
-      "ICO_API": "http://localhost:8001/api",
-      "XBT_API": "http://localhost:8002/api/1",
-      "ETH_API": "http://localhost:8003/api/1"
+      "EXCHANGE_API": "https://conversion.s.services.rehive.io/api"
     }
   },
   "production": {
     "environmentConfig": {
-      "API": "https://rehive.com/api/3",
-      "COMPANY": "imali_demo",
-      "EXCHANGE_API": "http://localhost:8000/api",
-      "ICO_API": "https://ico.services.rehive.io/api",
-      "XBT_API": "https://bitcoin.services.rehive.com/api/1",
-      "ETH_API": "https://ethereum.services.rehive.com/api/1"
+      "API": "https://api.rehive.com/3",
+      "COMPANY": "imali_prod",
+      "EXCHANGE_API": "https://conversion.services.rehive.io/api"
+    }
+  },
+  "placeholder": {
+    "environmentConfig": {
+      "API": "{{API_URL}}",
+      "COMPANY": "{{COMPANY_IDENTIFIER}}",
+      "EXCHANGE_API": "{{EXCHANGE_API_URL}}"
     }
   }
 }

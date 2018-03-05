@@ -5,7 +5,7 @@
         .controller('ConfirmMobileCtrl', ConfirmMobileCtrl);
 
     /** @ngInject */
-    function ConfirmMobileCtrl($rootScope,$scope,$http,cookieManagement,environmentConfig,$location,errorToasts,toastr,userVerification) {
+    function ConfirmMobileCtrl($rootScope,$scope,$http,cookieManagement,$state,environmentConfig,$location,errorToasts,toastr,userVerification) {
 
         var vm = this;
         vm.token = cookieManagement.getCookie('TOKEN');
@@ -16,7 +16,7 @@
         };
 
         $scope.goBack = function(){
-            $location.path('mobile/verify');
+            $state.go("verifyMobile", { from: "confirm"});
         };
 
         vm.checkIfMobileVerified = function(number){

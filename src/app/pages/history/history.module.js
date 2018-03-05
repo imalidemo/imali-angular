@@ -11,7 +11,7 @@
           url: '/history',
           templateUrl: 'app/pages/history/history.html',
           controller: 'HistoryCtrl',
-          title: 'Quotes History',
+          title: 'Quotes',
           sidebarMeta: {
               order: 100
           }

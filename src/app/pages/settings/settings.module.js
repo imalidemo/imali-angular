@@ -22,7 +22,7 @@
                 controller: "SettingsCtrl",
                 title: 'Settings',
                 sidebarMeta: {
-                  order: 200
+                    order: 400
                 }
             });
     }

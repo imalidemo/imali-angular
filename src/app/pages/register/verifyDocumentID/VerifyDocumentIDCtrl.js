@@ -72,7 +72,7 @@
                             }
                         }
                     }
-                    if($scope.status == 'verified'){
+                    if($scope.status == 'verified' ){
                         $scope.goToNextView();
                     }
                     $scope.loadingDocumentsIDView = false;
@@ -118,7 +118,7 @@
             });
 
             vm.theAddModal.result.then(function(){
-                vm.getUserDocuments();
+                $location.path('/home');
             }, function(){
             });
         };
@@ -144,7 +144,7 @@
         };
 
         $scope.goToNextView = function(){
-            $location.path('/document/verify/IDSelfie');
+            $location.path('/home');
         };
 
     }

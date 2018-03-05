@@ -15,8 +15,8 @@
             last_name: '',
             email: '',
             password: '',
-            nationality: '',
-            ageVerification: false
+            nationality: ''
+            // ageVerification: false
         };
 
         $scope.registerUser = function() {

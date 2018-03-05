@@ -60,6 +60,10 @@ select.form-control {
   }
 }
 
+.form-control-currency{
+  padding: 10px 12px!important;
+}
+
 textarea.form-control {
   height: 96px;
 }
@@ -294,7 +298,7 @@ label.custom-checkbox {
     line-height: 16px;
     font-weight: $font-light;
     cursor: pointer;
-    padding-left: 22px;
+    padding: 0px 0px 10px 25px;
     left: 20px;
     width: 100%;
     &:before {
@@ -394,7 +398,9 @@ label.custom-input-danger {
 .input-demo {
   line-height: 25px;
 }
-
+.amount-text{
+  font-size: 13px;
+}
 @mixin validationState($color, $focusColor) {
   .control-label {
     color: $default-text;

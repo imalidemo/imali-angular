@@ -1,12 +1,18 @@
 <div class="row">
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <div class="page-top auth-nav-table clearfix" scroll-position="scrolled" max-height="50" ng-class="{'scrolled': scrolled}">
-        <!-- <div class="auth-nav-cell">
-          <img src="assets/img/echarge.png" class="auth-nav-user pull-left logo-echarge" />
-        </div>  -->
-        <div ng-show="USER.first_name" class="auth-nav-cell">
-          <a href="#/signout" ><button ng-class="{'active-auth-nav': path == '/home'}" class="btn btn-lg btn-primary pull-right auth-nav-buttons">Sign out</button></a>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="page-top auth-nav-table clearfix" scroll-position="scrolled" max-height="50"
+             ng-class="{'scrolled': scrolled}">
+            <div class="auth-nav-cell">
+                <p class="imali-text pull-left">imali</p>
+                <!--<img src="assets/img/Imali_Logo_PNG.png" class="auth-nav-user pull-left logo-echarge"/>-->
+            </div>
+            <div ng-show="USER.first_name" class="auth-nav-cell">
+                <a href="#/signout">
+                    <button ng-class="{'active-auth-nav': path == '/home'}"
+                            class="btn btn-lg btn-primary pull-right auth-nav-buttons">Sign out
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
-  </div>
 </div>

@@ -15,68 +15,71 @@
         $rootScope.mobileVerified = false;
         $rootScope.addressVerified = "n";
         $rootScope.idDocumentsVerified = 'n';
-        $rootScope.residenceDocumentsVerified = 'n';
-        
-        $rootScope.selfieDocumentsVerified = 'n';
-        $rootScope.ethereumAddressVerified = true;
 
         $scope.goToGetVerified = function (path) {
             $location.path(path);
         };
 
         vm.getUserInfo = function(){
-            $scope.loadingRegisterProgressView = true;
-            $http.get(environmentConfig.API + '/user/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': vm.token
-                }
-            }).then(function (res) {
-                if (res.status === 200) {
-                    $scope.user = res.data.data;
-                    vm.checkingEmailVerfication(res.data.data.email);
-                    if($scope.user.status =='verified') {
-                        $rootScope.addressVerified = "v";
+            if(vm.token){
+                $scope.loadingRegisterProgressView = true;
+                $http.get(environmentConfig.API + '/user/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': vm.token
                     }
-                    else if($scope.user.status =='pending') {
-                        $rootScope.addressVerified = "p";
-                        return;
-                    }
-                    else {
-                        return;
+                }).then(function (res) {
+                    if (res.status === 200) {
+                        $scope.user = res.data.data;
+                        console.log($scope.user)
+                        // if($scope.user.kyc.status=='verified'){
+                        //     $rootScope.kycVerified=true
+                        //     $location.path('/home');
+                        // }
+                        vm.checkingEmailVerfication(res.data.data.email);
+                        if($scope.user.status =='verified') {
+                            $rootScope.addressVerified = "v";
+                        }
+                        else if($scope.user.status =='pending') {
+                            $rootScope.addressVerified = "p";
+                            return;
+                        }
+                        else {
+                            return;
+                        }
+
+                        $http.get(environmentConfig.API + '/user/address/', {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': vm.token
+                            }
+                        }).then(function (res) {
+                            if (res.status === 200) {
+                                $scope.address = res.data.data;
+                                if(!$scope.address.line_1 || !$scope.address.city || !$scope.address.country || !$scope.address.postal_code){
+                                    $scope.goToGetVerified("/identity/verification");
+                                }
+                                if($scope.address.status =='verified') {
+                                    $rootScope.addressVerified = "v";
+                                    if($rootScope.emailVerified == true && $rootScope.mobileVerified == true && $rootScope.addressVerified=="v" && $rootScope.idDocumentsVerified=='v'){
+                                        $scope.allVerified = true;
+                                    }
+                                }
+                                else if($scope.address.status =='pending') {
+                                    $rootScope.addressVerified = "p";
+                                }
+                            }
+                        }).catch(function (error) {
+                            $scope.loadingRegisterProgressView = false;
+                            errorToasts.evaluateErrors(error.data);
+                        });
                     }
 
-                    if($scope.user.kyc.status == "verified"){
-                        $scope.allVerified = true;
-                        if($rootScope.ethereumAddressVerified){
-                            $rootScope.allVerified = true;
-                        }
-                    }
-                    $http.get(environmentConfig.API + '/user/address/', {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': vm.token
-                        }
-                    }).then(function (res) {
-                        if (res.status === 200) {
-                            $scope.user = res.data.data;
-                            if($scope.user.status =='verified') {
-                                $rootScope.addressVerified = "v";
-                            }
-                             else if($scope.user.status =='pending') {
-                                $rootScope.addressVerified = "p";
-                            }
-                        }
-                    }).catch(function (error) {
-                        $scope.loadingRegisterProgressView = false;
-                        errorToasts.evaluateErrors(error.data);
-                    });
-                }
-                
-            }).catch(function (error) {
-                $scope.loadingRegisterProgressView = false;
-                errorToasts.evaluateErrors(error.data);
-            });
+                }).catch(function (error) {
+                    $scope.loadingRegisterProgressView = false;
+                    errorToasts.evaluateErrors(error.data);
+                });
+            }
         };
         vm.getUserInfo();
 
@@ -85,8 +88,12 @@
             userVerification.verifyEmail(function(err,verified){
                 if(verified){
                     $rootScope.emailVerified = true;
+                    if($scope.user.mobile_number==null || $scope.user.mobile_number.length==0){
+                        $scope.goToGetVerified("/mobile/verify");
+                    }
                     vm.checkingMobileVerification($scope.user.mobile_number);
                 } else {
+                    $scope.goToGetVerified("/email/verify");
                     $rootScope.emailVerified = false;
                     $scope.loadingRegisterProgressView = false;
                 }
@@ -98,39 +105,43 @@
             userVerification.verifyMobile(function(err,verified){
                 if(verified){
                     $rootScope.mobileVerified = true;
+                    if($rootScope.emailVerified == true && $rootScope.mobileVerified == true && $rootScope.addressVerified=="v" && $rootScope.idDocumentsVerified=="v"){
+                        $scope.allVerified = true;
+                    }
                     $scope.loadingRegisterProgressView = false;
                 } else {
                     $rootScope.mobileVerified = false;
+                    $scope.goToGetVerified("/mobile/verify");
                     $scope.loadingRegisterProgressView = false;
                 }
             },number);
         };
 
         vm.getUserDocuments = function(){
-            $http.get(environmentConfig.API + '/user/documents/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': vm.token
-                }
-            }).then(function (res) {
-                if (res.status === 200) {
-                    $scope.idDocuments = res.data.data.results.filter(function (element) {
-                        return element.document_category == 'Proof Of Identity';
-                    });
-                    $rootScope.idDocumentsVerified = vm.checkDocumentsArrayVerification($scope.idDocuments);
-                    $scope.residenceDocuments = res.data.data.results.filter(function (element) {
-                        return element.document_category == 'Proof Of Address';
-                    });
-                    $rootScope.residenceDocumentsVerified = vm.checkDocumentsArrayVerification($scope.residenceDocuments);
-                    $scope.selfieDocuments = res.data.data.results.filter(function (element) {
-                        return element.document_category == 'Advanced Proof Of Identity';
-                    });
-                    $rootScope.selfieDocumentsVerified = vm.checkDocumentsArrayVerification($scope.selfieDocuments);
-                }
-            }).catch(function (error) {
-                $scope.loadingRegisterProgressView = false;
-                errorToasts.evaluateErrors(error.data);
-            });
+            if(vm.token) {
+                $http.get(environmentConfig.API + '/user/documents/', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': vm.token
+                    }
+                }).then(function (res) {
+                    if (res.status === 200) {
+                        $scope.idDocuments = res.data.data.results.filter(function (element) {
+                            return element.document_category == 'Proof Of Identity';
+                        });
+                        if($scope.idDocuments.length==0){
+                            $scope.goToGetVerified("/document/verify/ID")
+                        }
+                        $rootScope.idDocumentsVerified = vm.checkDocumentsArrayVerification($scope.idDocuments);
+                        if($rootScope.emailVerified == true && $rootScope.mobileVerified == true && $rootScope.addressVerified==true && $rootScope.idDocumentsVerified=='v'){
+                            $scope.allVerified = true;
+                        }
+                    }
+                }).catch(function (error) {
+                    $scope.loadingRegisterProgressView = false;
+                    errorToasts.evaluateErrors(error.data);
+                });
+            }
         };
         vm.getUserDocuments();
 
@@ -155,31 +166,7 @@
                 }
             }
             return 'n';
-        }; 
-
-        vm.getEthereumAddresses = function(){
-            $http.get(environmentConfig.API + '/user/bitcoin-accounts/', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': vm.token
-                }
-            }).then(function (res) {
-                if (res.status === 200) {
-                    if(res.data.data.length > 0){
-                        $rootScope.ethereumAddressVerified = true;
-                        if($scope.allVerified){
-                            $rootScope.allVerified = true;
-                        }
-                    } else {
-                        $rootScope.ethereumAddressVerified = false;
-                    }
-                }
-            }).catch(function (error) {
-                $scope.loadingRegisterProgressView = false;
-                errorToasts.evaluateErrors(error.data);
-            });
         };
-        // vm.getEthereumAddresses();
         
 
     }

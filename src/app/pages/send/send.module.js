@@ -11,7 +11,7 @@
           url: '/home',
           templateUrl: 'app/pages/send/send.html',
           controller: 'SendCtrl',
-          title: 'Send Money',
+          title: 'Send money',
           sidebarMeta: {
             order: 1
           }

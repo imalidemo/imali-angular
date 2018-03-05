@@ -16,6 +16,41 @@
   height: 100%;
   width: 100%;
 }
+.loading-auth-block {
+  position: relative;
+  width: 490px;
+  margin: 10vh auto;
+  border-radius: 0;
+  color: #000;
+  padding: 0 20px 20px 20px;
+  h1 {
+    font-weight: $font-light;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  p {
+    font-size: 16px;
+    line-height: 20px;
+  }
+  a {
+    text-decoration: none;
+    outline: none;
+    transition: all 0.2s ease;
+    color: $primary;
+    &:hover {
+      color: $primary-dark;
+    }
+  }
+
+  .control-label {
+    padding-top: 11px;
+    color: $text-color;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+}
 
 .auth-block {
   position: relative;

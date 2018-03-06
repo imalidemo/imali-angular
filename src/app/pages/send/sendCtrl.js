@@ -123,6 +123,9 @@
         }).then(function (res) {
             $scope.loadingQuote = false;
             $scope.response = res.data.data.results;
+            
+
+            console.log($scope.response);
             for (var i = 0; i < $scope.response.length; i++) {
                 if ($scope.response[i].to_currency.code === "GBP") {
                     $scope.GBP_currency = $scope.response[i];
@@ -175,19 +178,24 @@
 
         }
         $scope.getQuote = function (from_currency, to_amount) {
-            if (from_currency === "USD") {
-                $scope.to_currency = $scope.USD_currency
-            } else if (from_currency === "GBP") {
-                $scope.to_currency = $scope.GBP_currency
+            try{
+                    if (from_currency === "USD") {
+                    $scope.to_currency = $scope.USD_currency
+                } else if (from_currency === "GBP") {
+                    $scope.to_currency = $scope.GBP_currency
+                }
+                
+                if($scope.to_currency.fixed_rate && $scope.to_currency.fixed_rate!=0){
+                    $scope.rate=$scope.to_currency.fixed_rate
+                }else{
+                    $scope.rate=$scope.to_currency.rate
+                }
+                $scope.NGNInCents=currencyModifiers.convertToCents((to_amount),$scope.to_currency.from_currency.divisibility);
+                $scope.NGNInCents =$scope.NGNInCents / $scope.rate
+                $scope.changeTab('show_quote');
+            }catch(error) {
+                toastr.error('Rates are not available for the selected currency.', '');
             }
-            if($scope.to_currency.fixed_rate){
-                $scope.rate=$scope.to_currency.fixed_rate
-            }else{
-                $scope.rate=$scope.to_currency.rate
-            }
-            $scope.NGNInCents=currencyModifiers.convertToCents((to_amount),$scope.to_currency.from_currency.divisibility);
-            $scope.NGNInCents =$scope.NGNInCents / $scope.rate
-            $scope.changeTab('show_quote');
         }
 
         $scope.changeTab = function (tabName) {

@@ -21,6 +21,7 @@ ingress:
   hosts:
     - imali.services.rehive.io
     - www.imali.services.rehive.io
+    - app.imali.io
   annotations:
     kubernetes.io/ingress.class: "nginx"
     kubernetes.io/tls-acme: "true"
@@ -28,6 +29,7 @@ ingress:
     - hosts:
       - imali.services.rehive.io
       - www.imali.services.rehive.io
+      - app.imali.io
       secretName: imali-app-tls
 management:
   enabled: false

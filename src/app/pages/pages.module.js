@@ -30,7 +30,8 @@
     'BlurAdmin.pages.resetPasswordConfirmation',
     'BlurAdmin.pages.multiFactorAuth',
     'BlurAdmin.pages.smsAuth',
-    'BlurAdmin.pages.multiFactorAuthVerify'
+    'BlurAdmin.pages.multiFactorAuthVerify',
+    'BlurAdmin.pages.setPasswordConfirmation'
   ])
       .config(routeConfig);
 

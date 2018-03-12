@@ -168,8 +168,9 @@
                placeholder="E.g hello@example.com">
     </div>
     <div class="form-group">
-        <label><strong>Extra</strong></label>
-        <input type="text" ng-model="newBankData.extra" class="form-control">
+        <label><strong>Extra</strong><br>
+            Please follow the instructions provided by your recipient if extra details are required. It is important to include your Company Name, Member Number, Lot Numbers as required by the recipient.</label>
+        <input type="text" ng-model="newBankData.extra" class="form-control" placeholder="E.g required extra details">
     </div>
     <div class="form-group" ng-show="selected_account == -1">
         <button ng-disabled="!bankAccountForm.$valid" ng-click="addBankAccount(newBankData)"

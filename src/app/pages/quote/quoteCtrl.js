@@ -119,15 +119,24 @@
                         var item = [{id: -1, bank_name: "Add a new recipient", number: ""},
                             {
                                 id: -2,
-                                name: "Copart",
-                                bank_name: "Wells Fargo Bank",
-                                number: "4114145394",
-                                aba: " 121000248",
-                                swift: "WFBIUS6S",
-                                recipient: "rafee+1@rehive.com"
+                                name: 'Manheim',
+                                bank_name: 'Wells Fargo',
+                                number: '2080000698511',
+                                wire: 'RTN 121000248',
+                                swift: 'WFBIUS6S',
+                                aba: '121000248'
                             },
+                            {
+                                id:-3,
+                                name: 'Copart, Inc. Member Wire Account',
+                                bank_name: 'Wells Fargo',
+                                number: '4114145394',
+                                aba: '121000248',
+                                swift: 'WFBIUS6S',
+                                bank_address: 'Wells Fargo Bank, 420 Montgomery Street 7th Floor San Francisco, CA 94104'
+                            }
                         ]
-                        $scope.bankAccounts.splice(0, 0, item[0], item[1]);
+                        $scope.bankAccounts.splice(0, 0, item[0], item[1], item[2]);
                     }
                 }).catch(function (error) {
                     $scope.loading = false;

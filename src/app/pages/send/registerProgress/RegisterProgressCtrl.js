@@ -32,47 +32,50 @@
                     if (res.status === 200) {
                         $scope.user = res.data.data;
                         console.log($scope.user)
-                        // if($scope.user.kyc.status=='verified'){
-                        //     $rootScope.kycVerified=true
-                        //     $location.path('/home');
-                        // }
-                        vm.checkingEmailVerfication(res.data.data.email);
-                        if($scope.user.status =='verified') {
-                            $rootScope.addressVerified = "v";
-                        }
-                        else if($scope.user.status =='pending') {
-                            $rootScope.addressVerified = "p";
-                            return;
+                        if($scope.user.kyc.status=='verified'){
+                            $rootScope.allVerified=true
+                            //$location.path('/home');
                         }
                         else {
-                            return;
-                        }
-
-                        $http.get(environmentConfig.API + '/user/address/', {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': vm.token
+                            vm.checkingEmailVerfication(res.data.data.email);
+                            if($scope.user.status =='verified') {
+                                $rootScope.addressVerified = "v";
                             }
-                        }).then(function (res) {
-                            if (res.status === 200) {
-                                $scope.address = res.data.data;
-                                if(!$scope.address.line_1 || !$scope.address.city || !$scope.address.country || !$scope.address.postal_code){
-                                    $scope.goToGetVerified("/identity/verification");
+                            else if($scope.user.status =='pending') {
+                                $rootScope.addressVerified = "p";
+                                return;
+                            }
+                            else {
+                                return;
+                            }
+
+                            $http.get(environmentConfig.API + '/user/address/', {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': vm.token
                                 }
-                                if($scope.address.status =='verified') {
-                                    $rootScope.addressVerified = "v";
-                                    if($rootScope.emailVerified == true && $rootScope.mobileVerified == true && $rootScope.addressVerified=="v" && $rootScope.idDocumentsVerified=='v'){
-                                        $scope.allVerified = true;
+                            }).then(function (res) {
+                                if (res.status === 200) {
+                                    $scope.address = res.data.data;
+                                    if(!$scope.address.line_1 || !$scope.address.city || !$scope.address.country || !$scope.address.postal_code){
+                                        $scope.goToGetVerified("/identity/verification");
+                                    }
+                                    if($scope.address.status =='verified') {
+                                        $rootScope.addressVerified = "v";
+                                        if($rootScope.emailVerified == true && $rootScope.mobileVerified == true && $rootScope.addressVerified=="v" && $rootScope.idDocumentsVerified=='v'){
+                                            $scope.allVerified = true;
+                                        }
+                                    }
+                                    else if($scope.address.status =='pending') {
+                                        $rootScope.addressVerified = "p";
                                     }
                                 }
-                                else if($scope.address.status =='pending') {
-                                    $rootScope.addressVerified = "p";
-                                }
-                            }
-                        }).catch(function (error) {
-                            $scope.loadingRegisterProgressView = false;
-                            errorToasts.evaluateErrors(error.data);
-                        });
+                            }).catch(function (error) {
+                                $scope.loadingRegisterProgressView = false;
+                                errorToasts.evaluateErrors(error.data);
+                            });
+                        }
+                        
                     }
 
                 }).catch(function (error) {
@@ -114,6 +117,8 @@
                     $scope.goToGetVerified("/mobile/verify");
                     $scope.loadingRegisterProgressView = false;
                 }
+                
+            vm.getUserDocuments();
             },number);
         };
 
@@ -143,7 +148,6 @@
                 });
             }
         };
-        vm.getUserDocuments();
 
         vm.checkDocumentsArrayVerification = function(documentsArray){
             if(documentsArray.length === 0){

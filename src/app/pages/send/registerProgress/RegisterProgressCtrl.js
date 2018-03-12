@@ -34,7 +34,7 @@
                         console.log($scope.user)
                         if($scope.user.kyc.status=='verified'){
                             $rootScope.allVerified=true
-                            //$location.path('/home');
+                            $location.path('/home');
                         }
                         else {
                             vm.checkingEmailVerfication(res.data.data.email);

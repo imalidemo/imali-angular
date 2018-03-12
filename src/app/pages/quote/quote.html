@@ -170,7 +170,7 @@
     <div class="form-group">
         <label><strong>Extra</strong><br>
             Please follow the instructions provided by your recipient if extra details are required. It is important to include your Company Name, Member Number, Lot Numbers as required by the recipient.</label>
-        <textarea ng-model="newBankData.extra" class="form-control" rows="2" style="height:60px" placeholder="Example: _Joe’s Body Shop, Member #12345, Lots #1122337, #1144557"></textarea>
+        <textarea ng-model="newBankData.extra" class="form-control" rows="2" style="height:60px" placeholder="Example: Joe’s Body Shop, Member #12345, Lots #1122337, #1144557"></textarea>
     </div>
     <div class="form-group" ng-show="selected_account == -1">
         <button ng-disabled="!bankAccountForm.$valid" ng-click="addBankAccount(newBankData)"

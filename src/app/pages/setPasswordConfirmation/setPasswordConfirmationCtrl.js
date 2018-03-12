@@ -29,7 +29,7 @@
                     toastr.success(res.data.message);
                 }
             }).catch(function (error) {
-                toastr.error("Password reset failed");
+                toastr.error("Password set failed");
                 errorToasts.evaluateErrors(error.data);
             });
         };

@@ -8,7 +8,7 @@
     function routeConfig($stateProvider) {
         $stateProvider
             .state('setPasswordConfirmation', {
-                url: '/password/set/confirm/',
+                url: '/setpassword/',
                 views:{
                     'admin':{
                         templateUrl: 'app/pages/setPasswordConfirmation/setPasswordConfirmation.html',

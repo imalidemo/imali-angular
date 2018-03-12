@@ -119,15 +119,16 @@
                         var item = [{id: -1, bank_name: "Add a new recipient", number: ""},
                             {
                                 id: -2,
+                                recipient: 'manheim@imali.io',
                                 name: 'Manheim',
                                 bank_name: 'Wells Fargo',
                                 number: '2080000698511',
-                                wire: 'RTN 121000248',
                                 swift: 'WFBIUS6S',
                                 aba: '121000248'
                             },
                             {
                                 id:-3,
+                                recipient: 'copart@imali.io',
                                 name: 'Copart, Inc. Member Wire Account',
                                 bank_name: 'Wells Fargo',
                                 number: '4114145394',

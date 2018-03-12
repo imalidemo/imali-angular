@@ -102,6 +102,14 @@
                             </th>
                             <th width="50%"></th>
                         </tr>
+                        <tr>
+                            <th width="2%"></th>
+                            <th width="20%" class="user-bank-table-th-title">Wire</th>
+                            <th width="8%"></th>
+                            <th width="20%" class="user-bank-table-th">{{getSelectedAccount().wire || 'Not provided'}}
+                            </th>
+                            <th width="50%"></th>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -162,14 +170,16 @@
             </div>
         </form>
     </div>
-    <div class="form-group" ng-show="selected_account != -1 && selected_account!=-2">
+    <div class="form-group" ng-show="selected_account != -1 && selected_account!=-2 && selected_account!=-3">
         <label><strong>Recipient email <span class="required-icon">*</span></strong></label>
         <input type="email" ng-model="newBankData.recipient" class="form-control"
                placeholder="E.g hello@example.com">
     </div>
     <div class="form-group">
-        <label><strong>Extra</strong><br>
+        <label><strong>Extra</strong><br></label>
+        <label>
             Please follow the instructions provided by your recipient if extra details are required. It is important to include your Company Name, Member Number, Lot Numbers as required by the recipient.</label>
+        </label>
         <textarea ng-model="newBankData.extra" class="form-control" rows="2" style="height:60px" placeholder="Example: Joe’s Body Shop, Member #12345, Lots #1122337, #1144557"></textarea>
     </div>
     <div class="form-group" ng-show="selected_account == -1">

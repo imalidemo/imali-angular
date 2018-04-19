@@ -6,7 +6,6 @@
 
     function TransactionModalCtrl($uibModalInstance,$http,$scope,errorToasts,toastr,transaction,metadataTextService,$location,environmentConfig,cookieManagement,$ngConfirm) {
         $scope.metadata = metadataTextService.convertToText(transaction.metadata);
-
         $scope.transaction = transaction;
         $scope.updatingTransaction = false;
 

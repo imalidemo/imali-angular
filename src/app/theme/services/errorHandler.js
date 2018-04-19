@@ -34,6 +34,9 @@
                         $location.path('/login');
                     }
                 }
+            },
+            handle403: function(){
+                $location.path('/login');
             }
         }
     }

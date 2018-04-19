@@ -76,6 +76,10 @@
                                 vm.getUserDocuments();
                             }).catch(function (error) {
                                 $scope.loadingRegisterProgressView = false;
+                                if (error.status == 403) {
+                                    errorHandler.handle403();
+                                    return;
+                                }
                                 errorToasts.evaluateErrors(error.data);
                             });
                         }
@@ -84,6 +88,10 @@
 
                 }).catch(function (error) {
                     $scope.loadingRegisterProgressView = false;
+                    if (error.status == 403) {
+                        errorHandler.handle403();
+                        return;
+                    }
                     errorToasts.evaluateErrors(error.data);
                 });
             }
@@ -153,6 +161,10 @@
                     }
                 }).catch(function (error) {
                     $scope.loadingRegisterProgressView = false;
+                    if (error.status == 403) {
+                        errorHandler.handle403();
+                        return;
+                    }
                     errorToasts.evaluateErrors(error.data);
                 });
             }

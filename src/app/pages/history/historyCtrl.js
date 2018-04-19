@@ -75,8 +75,9 @@
         }
         $scope.getQuotes();
         $scope.gotoConversion = function (quote) {
-            if (quote.conversion == null) {
-                $state.go('quote', {quote_id: quote.id})
+            console.log(quote)
+            if (!quote.conversion) {
+                //$state.go('quote', {quote_id: quote.id})
             }
         }
     }
